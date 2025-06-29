@@ -79,9 +79,11 @@ export default function ForMentors() {
                 </div>
               </div>
 
-              <Button className="bg-secondary-custom hover:bg-secondary-dark text-white px-8 py-4 rounded-lg font-semibold text-lg shadow-lg">
-                Become a Mentor
-              </Button>
+              <Link href="/contact">
+                <Button className="bg-secondary-custom hover:bg-secondary-dark text-white px-8 py-4 rounded-lg font-semibold text-lg shadow-lg">
+                  Become a Mentor
+                </Button>
+              </Link>
             </div>
             <div>
               <img
@@ -280,9 +282,11 @@ export default function ForMentors() {
             professional excellence.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button className="bg-white text-secondary-custom hover:bg-gray-100 px-8 py-4 rounded-lg font-semibold text-lg">
-              Apply to Mentor
-            </Button>
+            <Link href="/contact">
+              <Button className="bg-white text-secondary-custom hover:bg-gray-100 px-8 py-4 rounded-lg font-semibold text-lg">
+                Apply to Mentor
+              </Button>
+            </Link>
             <Link href="/faq">
               <Button
                 variant="outline"

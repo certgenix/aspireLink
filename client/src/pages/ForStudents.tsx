@@ -113,9 +113,11 @@ export default function ForStudents() {
           </div>
 
           <div className="text-center mb-16">
-            <Button className="bg-primary-custom hover:bg-primary-dark text-white px-10 py-4 rounded-lg font-semibold text-lg shadow-lg">
-              Apply Now
-            </Button>
+            <Link href="/contact">
+              <Button className="bg-primary-custom hover:bg-primary-dark text-white px-10 py-4 rounded-lg font-semibold text-lg shadow-lg">
+                Apply Now
+              </Button>
+            </Link>
           </div>
 
           {/* Application Process */}
@@ -242,9 +244,11 @@ export default function ForStudents() {
             trajectory through AspireLink.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button className="bg-primary-custom hover:bg-primary-dark text-white px-8 py-4 rounded-lg font-semibold text-lg">
-              Start Application
-            </Button>
+            <Link href="/contact">
+              <Button className="bg-primary-custom hover:bg-primary-dark text-white px-8 py-4 rounded-lg font-semibold text-lg">
+                Start Application
+              </Button>
+            </Link>
             <Link href="/faq">
               <Button
                 variant="outline"
