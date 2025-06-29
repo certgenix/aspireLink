@@ -14,12 +14,12 @@ export default function ForStudents() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="py-24 bg-gradient-to-br from-primary-custom to-blue-700 text-white">
+      <section className="py-24" style={{background: 'linear-gradient(135deg, #2E86AB 0%, #1e5b7a 100%)'}}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="font-inter font-bold text-4xl md:text-5xl mb-6">
+          <h1 className="font-inter font-bold text-4xl md:text-5xl mb-6" style={{color: '#ffffff'}}>
             For Students
           </h1>
-          <p className="text-xl leading-relaxed text-blue-100">
+          <p className="text-xl leading-relaxed" style={{color: '#ffffff'}}>
             Accelerate your career with personalized mentorship from industry
             leaders
           </p>
@@ -30,81 +30,81 @@ export default function ForStudents() {
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-3 gap-8 mb-16">
-            <Card className="bg-gradient-to-br from-primary-custom to-blue-700 text-white shadow-xl">
+            <Card className="shadow-xl" style={{background: 'linear-gradient(135deg, #2E86AB 0%, #1e5b7a 100%)'}}>
               <CardContent className="p-8">
-                <GraduationCap className="w-12 h-12 mb-6 text-white" />
-                <h3 className="font-inter font-semibold text-2xl mb-4 text-white">
+                <GraduationCap className="w-12 h-12 mb-6" style={{color: '#ffffff'}} />
+                <h3 className="font-inter font-semibold text-2xl mb-4" style={{color: '#ffffff'}}>
                   Eligibility
                 </h3>
-                <ul className="space-y-3 text-white">
+                <ul className="space-y-3" style={{color: '#ffffff'}}>
                   <li className="flex items-start">
-                    <CheckCircle className="mr-3 mt-1 w-4 h-4 text-white flex-shrink-0" />
+                    <CheckCircle className="mr-3 mt-1 w-4 h-4 flex-shrink-0" style={{color: '#ffffff'}} />
                     Current undergraduate or graduate student
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="mr-3 mt-1 w-4 h-4 text-white flex-shrink-0" />
+                    <CheckCircle className="mr-3 mt-1 w-4 h-4 flex-shrink-0" style={{color: '#ffffff'}} />
                     Faculty or peer nomination required
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="mr-3 mt-1 w-4 h-4 text-white flex-shrink-0" />
+                    <CheckCircle className="mr-3 mt-1 w-4 h-4 flex-shrink-0" style={{color: '#ffffff'}} />
                     Commitment to 4-month program
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="mr-3 mt-1 w-4 h-4 text-white flex-shrink-0" />
+                    <CheckCircle className="mr-3 mt-1 w-4 h-4 flex-shrink-0" style={{color: '#ffffff'}} />
                     Clear career goals and objectives
                   </li>
                 </ul>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-secondary-custom to-pink-700 text-white shadow-xl">
+            <Card className="shadow-xl" style={{background: 'linear-gradient(135deg, #A23B72 0%, #7d2d5a 100%)'}}>
               <CardContent className="p-8">
-                <Rocket className="w-12 h-12 mb-6 text-white" />
-                <h3 className="font-inter font-semibold text-2xl mb-4 text-white">
+                <Rocket className="w-12 h-12 mb-6" style={{color: '#ffffff'}} />
+                <h3 className="font-inter font-semibold text-2xl mb-4" style={{color: '#ffffff'}}>
                   Benefits
                 </h3>
-                <ul className="space-y-3 text-white">
+                <ul className="space-y-3" style={{color: '#ffffff'}}>
                   <li className="flex items-start">
-                    <Star className="mr-3 mt-1 w-4 h-4 text-white flex-shrink-0" />
+                    <Star className="mr-3 mt-1 w-4 h-4 flex-shrink-0" style={{color: '#ffffff'}} />
                     1-on-1 monthly mentorship sessions
                   </li>
                   <li className="flex items-start">
-                    <Star className="mr-3 mt-1 w-4 h-4 text-white flex-shrink-0" />
+                    <Star className="mr-3 mt-1 w-4 h-4 flex-shrink-0" style={{color: '#ffffff'}} />
                     Industry insights and networking
                   </li>
                   <li className="flex items-start">
-                    <Star className="mr-3 mt-1 w-4 h-4 text-white flex-shrink-0" />
+                    <Star className="mr-3 mt-1 w-4 h-4 flex-shrink-0" style={{color: '#ffffff'}} />
                     Career guidance and goal setting
                   </li>
                   <li className="flex items-start">
-                    <Star className="mr-3 mt-1 w-4 h-4 text-white flex-shrink-0" />
+                    <Star className="mr-3 mt-1 w-4 h-4 flex-shrink-0" style={{color: '#ffffff'}} />
                     Professional development resources
                   </li>
                 </ul>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-accent-custom to-orange-700 text-white shadow-xl">
+            <Card className="shadow-xl" style={{background: 'linear-gradient(135deg, #F18F01 0%, #c47301 100%)'}}>
               <CardContent className="p-8">
-                <Calendar className="w-12 h-12 mb-6 text-white" />
-                <h3 className="font-inter font-semibold text-2xl mb-4 text-white">
+                <Calendar className="w-12 h-12 mb-6" style={{color: '#ffffff'}} />
+                <h3 className="font-inter font-semibold text-2xl mb-4" style={{color: '#ffffff'}}>
                   Timeline
                 </h3>
-                <ul className="space-y-3 text-white">
+                <ul className="space-y-3" style={{color: '#ffffff'}}>
                   <li className="flex items-start">
-                    <Clock className="mr-3 mt-1 w-4 h-4 text-white flex-shrink-0" />
+                    <Clock className="mr-3 mt-1 w-4 h-4 flex-shrink-0" style={{color: '#ffffff'}} />
                     Application & nomination period
                   </li>
                   <li className="flex items-start">
-                    <Clock className="mr-3 mt-1 w-4 h-4 text-white flex-shrink-0" />
+                    <Clock className="mr-3 mt-1 w-4 h-4 flex-shrink-0" style={{color: '#ffffff'}} />
                     Matching process (2 weeks)
                   </li>
                   <li className="flex items-start">
-                    <Clock className="mr-3 mt-1 w-4 h-4 text-white flex-shrink-0" />
+                    <Clock className="mr-3 mt-1 w-4 h-4 flex-shrink-0" style={{color: '#ffffff'}} />
                     4-month mentorship program
                   </li>
                   <li className="flex items-start">
-                    <Clock className="mr-3 mt-1 w-4 h-4 text-white flex-shrink-0" />
+                    <Clock className="mr-3 mt-1 w-4 h-4 flex-shrink-0" style={{color: '#ffffff'}} />
                     Recognition and networking event
                   </li>
                 </ul>
