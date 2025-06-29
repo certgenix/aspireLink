@@ -22,80 +22,82 @@ export default function Home() {
       {/* Hero Section */}
       <section className="hero-gradient py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="text-center lg:text-left bg-white bg-opacity-90 p-8 rounded-2xl shadow-lg">
-              <h1 className="font-inter font-bold text-4xl md:text-5xl lg:text-6xl text-charcoal-custom leading-tight mb-6">
-                Connect. Learn.{" "}
-                <span className="text-primary-custom">Aspire.</span>
-              </h1>
-              <p className="text-xl mb-8 leading-relaxed" style={{color: '#2F3E46'}}>
-                Join AspireLink's free mentorship program connecting students
-                with experienced professionals through 4-month academic cohorts.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <Link href="/students">
-                  <Button className="bg-primary-custom hover:bg-primary-dark text-white px-8 py-4 rounded-lg font-semibold text-lg shadow-lg">
-                    Apply as Student
-                  </Button>
-                </Link>
-                <Link href="/mentors">
-                  <Button
-                    variant="outline"
-                    className="border-2 px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200"
-                    style={{
-                      borderColor: '#2E86AB',
-                      color: '#2E86AB',
-                      backgroundColor: 'transparent'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = '#2E86AB';
-                      e.currentTarget.style.color = '#ffffff';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                      e.currentTarget.style.color = '#2E86AB';
-                    }}
-                  >
-                    Become a Mentor
-                  </Button>
-                </Link>
-              </div>
-              <div className="mt-8 flex items-center justify-center lg:justify-start space-x-6 text-sm" style={{color: '#2F3E46'}}>
-                <div className="flex items-center">
-                  <CheckCircle className="text-green-500 mr-2 w-4 h-4" />
-                  <span>100% Free</span>
+          <div className="bg-white bg-opacity-95 rounded-3xl shadow-2xl p-8 lg:p-12">
+            <div className="grid lg:grid-cols-2 gap-8 items-stretch">
+              <div className="text-center lg:text-left flex flex-col justify-center h-full bg-gradient-to-br from-blue-50 to-indigo-50 p-8 rounded-2xl">
+                <h1 className="font-inter font-bold text-4xl md:text-5xl lg:text-6xl text-charcoal-custom leading-tight mb-6">
+                  Connect. Learn.{" "}
+                  <span className="text-primary-custom">Aspire.</span>
+                </h1>
+                <p className="text-xl mb-8 leading-relaxed" style={{color: '#2F3E46'}}>
+                  Join AspireLink's free mentorship program connecting students
+                  with experienced professionals through 4-month academic cohorts.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
+                  <Link href="/students">
+                    <Button className="bg-primary-custom hover:bg-primary-dark text-white px-8 py-4 rounded-lg font-semibold text-lg shadow-lg">
+                      Apply as Student
+                    </Button>
+                  </Link>
+                  <Link href="/mentors">
+                    <Button
+                      variant="outline"
+                      className="border-2 px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200"
+                      style={{
+                        borderColor: '#2E86AB',
+                        color: '#2E86AB',
+                        backgroundColor: 'transparent'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#2E86AB';
+                        e.currentTarget.style.color = '#ffffff';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.color = '#2E86AB';
+                      }}
+                    >
+                      Become a Mentor
+                    </Button>
+                  </Link>
                 </div>
-                <div className="flex items-center">
-                  <Users className="text-primary-custom mr-2 w-4 h-4" />
-                  <span>4-Month Program</span>
-                </div>
-                <div className="flex items-center">
-                  <Star className="text-accent-custom mr-2 w-4 h-4" />
-                  <span>Expert Mentors</span>
-                </div>
-              </div>
-            </div>
-            <div className="relative">
-              <img
-                src={brandedImagePath}
-                alt="AspireLink logo with handshake figures on graduation cap - Connecting ambition with experience"
-                className="rounded-2xl shadow-2xl w-full h-auto bg-white p-8"
-              />
-              <Card className="absolute -bottom-6 -left-6 w-64 shadow-lg">
-                <CardContent className="p-6">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                      <Video className="text-green-600 w-6 h-6" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-charcoal-custom">
-                        Monthly Sessions
-                      </p>
-                      <p className="text-sm text-gray-500">Virtual meetings</p>
-                    </div>
+                <div className="flex items-center justify-center lg:justify-start space-x-6 text-sm" style={{color: '#2F3E46'}}>
+                  <div className="flex items-center">
+                    <CheckCircle className="text-green-500 mr-2 w-4 h-4" />
+                    <span>100% Free</span>
                   </div>
-                </CardContent>
-              </Card>
+                  <div className="flex items-center">
+                    <Users className="text-primary-custom mr-2 w-4 h-4" />
+                    <span>4-Month Program</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Star className="text-accent-custom mr-2 w-4 h-4" />
+                    <span>Expert Mentors</span>
+                  </div>
+                </div>
+              </div>
+              <div className="relative bg-gradient-to-br from-gray-50 to-gray-100 p-8 rounded-2xl flex items-center justify-center">
+                <img
+                  src={brandedImagePath}
+                  alt="AspireLink logo with handshake figures on graduation cap - Connecting ambition with experience"
+                  className="rounded-2xl shadow-xl w-full h-auto max-w-md"
+                />
+                <Card className="absolute -bottom-4 -left-4 w-56 shadow-lg">
+                  <CardContent className="p-4">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                        <Video className="text-green-600 w-5 h-5" />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-charcoal-custom text-sm">
+                          Monthly Sessions
+                        </p>
+                        <p className="text-xs text-gray-500">Virtual meetings</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           </div>
         </div>
