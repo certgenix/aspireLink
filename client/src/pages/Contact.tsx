@@ -83,7 +83,7 @@ export default function Contact() {
                     How to Reach Us
                   </h3>
                   <div className="space-y-6">
-                    <div className="p-6 bg-primary-custom bg-opacity-5 rounded-lg">
+                    <div className="p-6 bg-gray-50 border border-gray-100 rounded-lg">
                       <div className="flex items-start space-x-4">
                         <div className="w-12 h-12 bg-primary-custom bg-opacity-10 rounded-full flex items-center justify-center flex-shrink-0">
                           <Mail className="text-primary-custom w-6 h-6" />
