@@ -118,6 +118,7 @@ Changelog:
 - June 29, 2025. Comprehensive text contrast improvements: replaced all gray text with high-contrast charcoal color (#2F3E46) across all pages, fixed "Learn More" buttons on For Students and For Mentors pages with proper contrast using inline styles and event handlers, corrected "Follow Us" button on FAQ page for optimal visibility
 - June 29, 2025. Enhanced FAQ page with orange gradient hero background (#F18F01 to #c47301) and white text for visual consistency with other pages
 - June 29, 2025. Added gradient hero backgrounds to About page (blue #2E86AB to #1e5b7a) and Contact page (magenta #A23B72 to #7d2d5a) with white text for complete visual consistency across all pages
+- June 29, 2025. Made each page hero banner unique: About page updated to purple gradient (#6366f1 to #4338ca), Contact page changed to green gradient (#10b981 to #047857) ensuring all six pages have distinct color schemes
 
 ## User Preferences
 
