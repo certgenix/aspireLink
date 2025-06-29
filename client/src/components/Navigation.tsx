@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Users } from "lucide-react";
+import { Menu } from "lucide-react";
+import logoPath from "@assets/AspireLink-Favicon_1751236188567.png";
 
 export default function Navigation() {
   const [location] = useLocation();
@@ -27,9 +28,11 @@ export default function Navigation() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex-shrink-0 flex items-center">
-            <div className="w-10 h-10 bg-primary-custom rounded-lg flex items-center justify-center mr-3">
-              <Users className="text-white text-lg" />
-            </div>
+            <img 
+              src={logoPath} 
+              alt="AspireLink Logo"
+              className="w-10 h-10 mr-3"
+            />
             <span className="font-inter font-bold text-xl text-charcoal-custom">
               AspireLink
             </span>
