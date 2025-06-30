@@ -58,7 +58,17 @@ export default function RegisterMentor() {
   const { toast } = useToast();
   const [step, setStep] = useState(1);
   const [linkedinUrl, setLinkedinUrl] = useState("");
-  const [linkedinData, setLinkedinData] = useState<LinkedInData | null>(null);
+  const [linkedinData, setLinkedinData] = useState<LinkedInData | null>({
+    fullName: "",
+    currentJobTitle: "",
+    company: "",
+    yearsExperience: 0,
+    education: "",
+    skills: [],
+    location: "",
+    timeZone: "",
+    profileSummary: ""
+  });
   const [isAutoFilling, setIsAutoFilling] = useState(false);
   const [selectedDisciplines, setSelectedDisciplines] = useState<string[]>([]);
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
@@ -465,7 +475,10 @@ export default function RegisterMentor() {
               <div className="flex justify-end">
                 <Button 
                   onClick={() => {
-                    if (!linkedinData?.fullName || !linkedinData?.currentJobTitle || !linkedinData?.company || !linkedinData?.yearsExperience) {
+                    if (!linkedinData?.fullName?.trim() || 
+                        !linkedinData?.currentJobTitle?.trim() || 
+                        !linkedinData?.company?.trim() || 
+                        linkedinData?.yearsExperience <= 0) {
                       toast({
                         title: "Required Fields Missing",
                         description: "Please fill in your name, job title, company, and years of experience.",
