@@ -13,6 +13,7 @@ import ForMentors from "@/pages/ForMentors";
 import FAQ from "@/pages/FAQ";
 import Contact from "@/pages/Contact";
 import RegisterMentor from "@/pages/RegisterMentor";
+import RegisterStudent from "@/pages/RegisterStudent";
 
 function Router() {
   return (
@@ -25,6 +26,7 @@ function Router() {
           <Route path="/students" component={ForStudents} />
           <Route path="/mentors" component={ForMentors} />
           <Route path="/register-mentor" component={RegisterMentor} />
+          <Route path="/register-student" component={RegisterStudent} />
           <Route path="/faq" component={FAQ} />
           <Route path="/contact" component={Contact} />
           <Route component={NotFound} />

@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertContactSchema, insertMentorRegistrationSchema } from "@shared/schema";
+import { insertContactSchema, insertMentorRegistrationSchema, insertStudentRegistrationSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -76,6 +76,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(registrations);
     } catch (error) {
       console.error("Error fetching mentor registrations:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
+  // Student registration submission endpoint
+  app.post("/api/student-registration", async (req, res) => {
+    try {
+      const registrationData = insertStudentRegistrationSchema.parse(req.body);
+      const registration = await storage.createStudentRegistration(registrationData);
+      res.json({ success: true, id: registration.id });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: "Invalid registration data", details: error.errors });
+      } else {
+        console.error("Error creating student registration:", error);
+        res.status(500).json({ error: "Internal server error" });
+      }
+    }
+  });
+
+  // Get all student registrations (for admin purposes)
+  app.get("/api/student-registrations", async (req, res) => {
+    try {
+      const registrations = await storage.getAllStudentRegistrations();
+      res.json(registrations);
+    } catch (error) {
+      console.error("Error fetching student registrations:", error);
       res.status(500).json({ error: "Internal server error" });
     }
   });

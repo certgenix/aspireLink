@@ -1,4 +1,4 @@
-import { users, contacts, mentorRegistrations, type User, type InsertUser, type Contact, type InsertContact, type MentorRegistration, type InsertMentorRegistration } from "@shared/schema";
+import { users, contacts, mentorRegistrations, studentRegistrations, type User, type InsertUser, type Contact, type InsertContact, type MentorRegistration, type InsertMentorRegistration, type StudentRegistration, type InsertStudentRegistration } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 
@@ -11,23 +11,29 @@ export interface IStorage {
   getAllContacts(): Promise<Contact[]>;
   createMentorRegistration(registration: InsertMentorRegistration): Promise<MentorRegistration>;
   getAllMentorRegistrations(): Promise<MentorRegistration[]>;
+  createStudentRegistration(registration: InsertStudentRegistration): Promise<StudentRegistration>;
+  getAllStudentRegistrations(): Promise<StudentRegistration[]>;
 }
 
 export class MemStorage implements IStorage {
   private users: Map<number, User>;
   private contacts: Map<number, Contact>;
   private mentorRegistrations: Map<number, MentorRegistration>;
+  private studentRegistrations: Map<number, StudentRegistration>;
   private currentUserId: number;
   private currentContactId: number;
   private currentMentorRegistrationId: number;
+  private currentStudentRegistrationId: number;
 
   constructor() {
     this.users = new Map();
     this.contacts = new Map();
     this.mentorRegistrations = new Map();
+    this.studentRegistrations = new Map();
     this.currentUserId = 1;
     this.currentContactId = 1;
     this.currentMentorRegistrationId = 1;
+    this.currentStudentRegistrationId = 1;
   }
 
   async getUser(id: number): Promise<User | undefined> {
@@ -96,6 +102,36 @@ export class MemStorage implements IStorage {
       (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
     );
   }
+
+  async createStudentRegistration(insertRegistration: InsertStudentRegistration): Promise<StudentRegistration> {
+    const id = this.currentStudentRegistrationId++;
+    const registration: StudentRegistration = {
+      id,
+      fullName: insertRegistration.fullName,
+      emailAddress: insertRegistration.emailAddress,
+      phoneNumber: insertRegistration.phoneNumber || null,
+      universityName: insertRegistration.universityName,
+      academicProgram: insertRegistration.academicProgram,
+      yearOfStudy: insertRegistration.yearOfStudy,
+      nominatedBy: insertRegistration.nominatedBy,
+      professorEmail: insertRegistration.professorEmail,
+      careerInterests: insertRegistration.careerInterests || null,
+      preferredIndustries: insertRegistration.preferredIndustries || null,
+      mentoringTopics: insertRegistration.mentoringTopics || null,
+      mentorshipGoals: insertRegistration.mentorshipGoals || null,
+      agreedToCommitment: insertRegistration.agreedToCommitment || false,
+      consentToContact: insertRegistration.consentToContact || false,
+      createdAt: new Date()
+    };
+    this.studentRegistrations.set(id, registration);
+    return registration;
+  }
+
+  async getAllStudentRegistrations(): Promise<StudentRegistration[]> {
+    return Array.from(this.studentRegistrations.values()).sort(
+      (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+    );
+  }
 }
 
 export class DatabaseStorage implements IStorage {
@@ -139,6 +175,18 @@ export class DatabaseStorage implements IStorage {
 
   async getAllMentorRegistrations(): Promise<MentorRegistration[]> {
     return await db.select().from(mentorRegistrations);
+  }
+
+  async createStudentRegistration(insertRegistration: InsertStudentRegistration): Promise<StudentRegistration> {
+    const [registration] = await db
+      .insert(studentRegistrations)
+      .values(insertRegistration)
+      .returning();
+    return registration;
+  }
+
+  async getAllStudentRegistrations(): Promise<StudentRegistration[]> {
+    return await db.select().from(studentRegistrations);
   }
 }
 

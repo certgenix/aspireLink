@@ -128,6 +128,7 @@ Changelog:
 - June 29, 2025. Removed 'Mentor Impact' section from For Mentors page since no mentor impact data exists yet for founding cohort
 - June 30, 2025. Added comprehensive Mentor Registration feature at /register-mentor route with manual professional data entry, database schema, API endpoints, and multi-step form ensuring data integrity by collecting authentic user information. Form validated and working with PostgreSQL storage.
 - June 30, 2025. Updated all mentor application buttons to link to registration form: "Become a Mentor" buttons on Home page (both hero and CTA sections) and For Mentors page, plus "Apply to Mentor" button on For Mentors page now direct users to /register-mentor route for streamlined registration process.
+- June 30, 2025. Added comprehensive Student Registration feature at /register-student route with 4-step multi-step form: Basic Information (name, email, university, academic program, year of study), Nomination Verification (professor name and email), Mentorship Matching preferences (career interests, industry preferences, topics, goals), and Consent & Confirmation. Includes database schema, API endpoints, form validation, and navigation updates linking all student application buttons.
 - June 29, 2025. Integrated custom AspireLink logo (handshake design) into navigation header and updated favicon, added SEO meta tags with proper title and description
 - June 29, 2025. Added professional student collaboration image to For Students page with accurate founding cohort messaging instead of false success statistics
 

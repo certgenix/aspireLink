@@ -252,7 +252,7 @@ export default function Home() {
             their careers through meaningful mentorship.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/students">
+            <Link href="/register-student">
               <Button className="bg-white text-primary-custom hover:bg-gray-100 px-8 py-4 rounded-lg font-semibold text-lg">
                 Apply as Student
               </Button>

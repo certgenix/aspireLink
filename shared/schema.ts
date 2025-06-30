@@ -40,6 +40,29 @@ export const mentorRegistrations = pgTable("mentor_registrations", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const studentRegistrations = pgTable("student_registrations", {
+  id: serial("id").primaryKey(),
+  // Basic Information
+  fullName: text("full_name").notNull(),
+  emailAddress: text("email_address").notNull(),
+  phoneNumber: text("phone_number"),
+  universityName: text("university_name").notNull(),
+  academicProgram: text("academic_program").notNull(),
+  yearOfStudy: text("year_of_study").notNull(),
+  // Nomination Verification
+  nominatedBy: text("nominated_by").notNull(),
+  professorEmail: text("professor_email").notNull(),
+  // Mentorship Matching
+  careerInterests: text("career_interests"),
+  preferredIndustries: text("preferred_industries").array(),
+  mentoringTopics: text("mentoring_topics"),
+  mentorshipGoals: text("mentorship_goals"),
+  // Consent & Confirmation
+  agreedToCommitment: boolean("agreed_to_commitment").default(false),
+  consentToContact: boolean("consent_to_contact").default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -57,9 +80,16 @@ export const insertMentorRegistrationSchema = createInsertSchema(mentorRegistrat
   createdAt: true,
 });
 
+export const insertStudentRegistrationSchema = createInsertSchema(studentRegistrations).omit({
+  id: true,
+  createdAt: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type InsertContact = z.infer<typeof insertContactSchema>;
 export type Contact = typeof contacts.$inferSelect;
 export type InsertMentorRegistration = z.infer<typeof insertMentorRegistrationSchema>;
 export type MentorRegistration = typeof mentorRegistrations.$inferSelect;
+export type InsertStudentRegistration = z.infer<typeof insertStudentRegistrationSchema>;
+export type StudentRegistration = typeof studentRegistrations.$inferSelect;
