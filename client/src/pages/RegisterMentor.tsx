@@ -401,6 +401,19 @@ export default function RegisterMentor() {
               </div>
 
               <div>
+                <Label htmlFor="linkedinUrl">LinkedIn Profile URL</Label>
+                <Input
+                  id="linkedinUrl"
+                  type="url"
+                  value={linkedinUrl}
+                  onChange={(e) => setLinkedinUrl(e.target.value)}
+                  placeholder="https://linkedin.com/in/yourprofile"
+                  className="mt-2"
+                />
+                <p className="text-sm text-gray-500 mt-1">Optional - helps verify your professional background</p>
+              </div>
+
+              <div>
                 <Label htmlFor="profileSummary">Professional Summary</Label>
                 <Textarea
                   id="profileSummary"
