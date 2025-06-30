@@ -114,12 +114,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { email, password } = req.body;
       
+      console.log("Login attempt - email:", JSON.stringify(email));
+      console.log("Login attempt - password:", JSON.stringify(password));
+      console.log("Expected email:", JSON.stringify("program.admin@aspirelink.com"));
+      console.log("Expected password:", JSON.stringify("@sp1reLink"));
+      console.log("Email lengths:", email?.length, "vs", "program.admin@aspirelink.com".length);
+      console.log("Password lengths:", password?.length, "vs", "@sp1reLink".length);
+      
       // Check hardcoded admin credentials
       if (email === "program.admin@aspirelink.com" && password === "@sp1reLink") {
         // Simple token for demo purposes
         const token = Buffer.from(`${email}:${Date.now()}`).toString('base64');
+        console.log("Login successful, generating token");
         res.json({ success: true, token });
       } else {
+        console.log("Login failed - credentials don't match");
         res.status(401).json({ success: false, error: "Invalid credentials" });
       }
     } catch (error) {
