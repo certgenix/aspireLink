@@ -17,6 +17,29 @@ export const contacts = pgTable("contacts", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const mentorRegistrations = pgTable("mentor_registrations", {
+  id: serial("id").primaryKey(),
+  // LinkedIn auto-filled data
+  linkedinUrl: text("linkedin_url"),
+  fullName: text("full_name").notNull(),
+  currentJobTitle: text("current_job_title").notNull(),
+  company: text("company").notNull(),
+  yearsExperience: integer("years_experience").notNull(),
+  education: text("education"),
+  skills: text("skills").array(),
+  location: text("location"),
+  timeZone: text("time_zone"),
+  profileSummary: text("profile_summary"),
+  // Mentorship-specific fields
+  preferredDisciplines: text("preferred_disciplines").array().notNull(),
+  mentoringTopics: text("mentoring_topics").array().notNull(),
+  availability: text("availability").array().notNull(),
+  motivation: text("motivation").notNull(),
+  agreedToCommitment: boolean("agreed_to_commitment").notNull(),
+  consentToContact: boolean("consent_to_contact").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -29,7 +52,28 @@ export const insertContactSchema = createInsertSchema(contacts).pick({
   message: true,
 });
 
+export const insertMentorRegistrationSchema = createInsertSchema(mentorRegistrations).pick({
+  linkedinUrl: true,
+  fullName: true,
+  currentJobTitle: true,
+  company: true,
+  yearsExperience: true,
+  education: true,
+  skills: true,
+  location: true,
+  timeZone: true,
+  profileSummary: true,
+  preferredDisciplines: true,
+  mentoringTopics: true,
+  availability: true,
+  motivation: true,
+  agreedToCommitment: true,
+  consentToContact: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type InsertContact = z.infer<typeof insertContactSchema>;
 export type Contact = typeof contacts.$inferSelect;
+export type InsertMentorRegistration = z.infer<typeof insertMentorRegistrationSchema>;
+export type MentorRegistration = typeof mentorRegistrations.$inferSelect;
