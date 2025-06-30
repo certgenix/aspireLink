@@ -235,41 +235,7 @@ export default function ForMentors() {
         </div>
       </section>
 
-      {/* Impact Stories */}
-      <section className="py-24 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-inter font-bold text-3xl md:text-4xl text-charcoal-custom text-center mb-12">
-            Mentor Impact
-          </h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <Card className="border-l-4 border-l-primary-custom">
-              <CardContent className="p-6">
-                <p className="text-gray-700 italic mb-4">
-                  "Mentoring through AspireLink has been one of the most
-                  rewarding experiences of my career. Seeing my mentee grow from
-                  uncertainty to landing their dream job was incredible."
-                </p>
-                <div className="text-sm text-gray-500">
-                  - Sarah Johnson, Senior Marketing Director
-                </div>
-              </CardContent>
-            </Card>
 
-            <Card className="border-l-4 border-l-secondary-custom">
-              <CardContent className="p-6">
-                <p className="text-gray-700 italic mb-4">
-                  "The fresh perspective my mentee brought to our conversations
-                  actually helped me think differently about challenges in my
-                  own work. It's truly a two-way learning experience."
-                </p>
-                <div className="text-sm text-gray-500">
-                  - David Chen, Software Engineering Manager
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
 
       {/* CTA Section */}
       <section className="py-24 bg-secondary-custom text-white">

@@ -125,6 +125,7 @@ Changelog:
 - June 29, 2025. Updated Home page hero image to custom AspireLink branded graphic with handshake logo on graduation cap and "Connecting ambition with experience" tagline
 - June 29, 2025. Added semi-transparent white background to 'Connect. Learn. Aspire.' hero panel for better contrast with branded image
 - June 29, 2025. Restructured hero section with equal-sized panels in parent container: text panel with blue gradient background, image panel with gray gradient background, both contained within semi-transparent white parent panel
+- June 29, 2025. Removed 'Mentor Impact' section from For Mentors page since no mentor impact data exists yet for founding cohort
 - June 29, 2025. Integrated custom AspireLink logo (handshake design) into navigation header and updated favicon, added SEO meta tags with proper title and description
 - June 29, 2025. Added professional student collaboration image to For Students page with accurate founding cohort messaging instead of false success statistics
 
