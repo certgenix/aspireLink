@@ -460,24 +460,27 @@ export default function RegisterMentor() {
 
 
 
-              <div className="space-y-4">
-                {/* Debug information */}
-                <div className="bg-gray-100 p-3 rounded text-sm">
-                  <p><strong>Debug - Form Values:</strong></p>
-                  <p>Full Name: "{linkedinData?.fullName || 'empty'}"</p>
-                  <p>Job Title: "{linkedinData?.currentJobTitle || 'empty'}"</p>
-                  <p>Company: "{linkedinData?.company || 'empty'}"</p>
-                  <p>Years Experience: {linkedinData?.yearsExperience || 0}</p>
-                </div>
-                
-                <div className="flex justify-end">
-                  <Button 
-                    onClick={() => setStep(2)}
-                    className="bg-primary-custom hover:bg-primary-dark text-white"
-                  >
-                    Continue to Preferences
-                  </Button>
-                </div>
+              <div className="flex justify-end">
+                <Button 
+                  onClick={() => {
+                    if (!linkedinData?.fullName?.trim() || 
+                        !linkedinData?.currentJobTitle?.trim() || 
+                        !linkedinData?.company?.trim() || 
+                        !linkedinData?.yearsExperience || 
+                        linkedinData?.yearsExperience <= 0) {
+                      toast({
+                        title: "Required Fields Missing",
+                        description: "Please fill in your name, job title, company, and years of experience.",
+                        variant: "destructive",
+                      });
+                      return;
+                    }
+                    setStep(2);
+                  }}
+                  className="bg-primary-custom hover:bg-primary-dark text-white"
+                >
+                  Continue to Preferences
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -658,7 +661,7 @@ export default function RegisterMentor() {
                     onClick={() => setStep(1)}
                     className="border-gray-300"
                   >
-                    Back to LinkedIn
+                    Back to Profile
                   </Button>
                   <Button
                     onClick={handleSubmit}
