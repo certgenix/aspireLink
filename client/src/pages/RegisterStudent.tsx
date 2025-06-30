@@ -44,6 +44,7 @@ const yearOfStudyOptions = [
 
 export default function RegisterStudent() {
   const [step, setStep] = useState(1);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [studentData, setStudentData] = useState<StudentData>({
     fullName: "",
     emailAddress: "",
@@ -81,29 +82,8 @@ export default function RegisterStudent() {
       return response.json();
     },
     onSuccess: () => {
-      toast({
-        title: "Registration Successful!",
-        description: "Thank you for applying to AspireLink. We'll be in touch soon.",
-      });
+      setIsSubmitted(true);
       queryClient.invalidateQueries({ queryKey: ["/api/student-registrations"] });
-      // Reset form
-      setStudentData({
-        fullName: "",
-        emailAddress: "",
-        phoneNumber: "",
-        universityName: "",
-        academicProgram: "",
-        yearOfStudy: "",
-        nominatedBy: "",
-        professorEmail: "",
-        careerInterests: "",
-        preferredIndustries: [],
-        mentoringTopics: "",
-        mentorshipGoals: "",
-        agreedToCommitment: false,
-        consentToContact: false
-      });
-      setStep(1);
     },
     onError: (error: any) => {
       toast({
@@ -225,6 +205,54 @@ export default function RegisterStudent() {
 
     registrationMutation.mutate(registrationData);
   };
+
+  // Show confirmation screen after successful submission
+  if (isSubmitted) {
+    return (
+      <div className="min-h-screen bg-light-custom py-24">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <Card className="max-w-2xl mx-auto">
+              <CardContent className="p-12">
+                <div className="flex flex-col items-center space-y-6">
+                  <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
+                    <CheckCircle className="w-12 h-12 text-green-600" />
+                  </div>
+                  <h1 className="text-3xl font-bold text-charcoal-custom">
+                    Registration Successful!
+                  </h1>
+                  <p className="text-lg text-gray-600 text-center">
+                    Thank you for applying to AspireLink's mentorship program. We've received your registration and will review your application carefully.
+                  </p>
+                  <div className="bg-blue-50 p-6 rounded-lg w-full">
+                    <h3 className="font-semibold text-charcoal-custom mb-2">What happens next?</h3>
+                    <ul className="text-sm text-gray-700 space-y-2">
+                      <li>• We'll contact your nominating professor to verify your nomination</li>
+                      <li>• Our matching team will review your preferences and goals</li>
+                      <li>• You'll receive an email within 2 weeks with your mentor match</li>
+                      <li>• Your 4-month mentorship program will begin once both parties confirm</li>
+                    </ul>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <Link href="/">
+                      <Button className="bg-primary-custom hover:bg-primary-dark text-white px-6 py-3">
+                        Return to Home
+                      </Button>
+                    </Link>
+                    <Link href="/faq">
+                      <Button variant="outline" className="px-6 py-3">
+                        View FAQ
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-light-custom py-24">

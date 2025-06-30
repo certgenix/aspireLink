@@ -57,14 +57,7 @@ export default function Navigation() {
             </div>
           </div>
 
-          {/* CTA Button */}
-          <div className="hidden md:block">
-            <Link href="/register-mentor">
-              <Button className="bg-accent-custom hover:bg-accent-dark text-white px-6 py-2 rounded-lg font-medium">
-                Register as Mentor
-              </Button>
-            </Link>
-          </div>
+
 
           {/* Mobile menu button */}
           <div className="md:hidden">
@@ -90,13 +83,7 @@ export default function Navigation() {
                       {item.label}
                     </Link>
                   ))}
-                  <div className="px-3 py-2">
-                    <Link href="/register-mentor" onClick={() => setIsOpen(false)}>
-                      <Button className="w-full bg-accent-custom hover:bg-accent-dark text-white px-6 py-2 rounded-lg font-medium">
-                        Register as Mentor
-                      </Button>
-                    </Link>
-                  </div>
+
                 </div>
               </SheetContent>
             </Sheet>
