@@ -133,6 +133,7 @@ Changelog:
 - June 30, 2025. Simplified student registration form validation to require only Full Name and Email address fields. All other fields (university, academic program, year of study, professor nomination) are now optional. Updated University name placeholder text to "Name of University" and removed contact support button from confirmation screen.
 - June 30, 2025. Updated student registration form validation: Step 1 requires only Full Name and Email, Steps 2-3 require all fields (professor nomination, career interests, industry preferences, mentoring topics, mentorship goals). Added FAQ button to registration success screen alongside Return to Home button.
 - June 30, 2025. Removed contact support button from all steps of student registration form to streamline the user experience and reduce unnecessary navigation away from the registration process.
+- June 30, 2025. Added email format validation to all email address fields in student registration form. Both student email and professor email fields now validate proper email format using regex pattern before allowing form progression.
 - June 29, 2025. Integrated custom AspireLink logo (handshake design) into navigation header and updated favicon, added SEO meta tags with proper title and description
 - June 29, 2025. Added professional student collaboration image to For Students page with accurate founding cohort messaging instead of false success statistics
 

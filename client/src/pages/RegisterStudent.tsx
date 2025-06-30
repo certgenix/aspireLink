@@ -111,6 +111,9 @@ export default function RegisterStudent() {
   };
 
   const handleNext = () => {
+    // Email validation regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
     if (step === 1) {
       if (!studentData.fullName.trim()) {
         toast({
@@ -124,6 +127,15 @@ export default function RegisterStudent() {
         toast({
           title: "Email Required",
           description: "Please enter your email address to continue.",
+          variant: "destructive",
+        });
+        return;
+      }
+      // Email format validation
+      if (!emailRegex.test(studentData.emailAddress.trim())) {
+        toast({
+          title: "Invalid Email Format",
+          description: "Please enter a valid email address.",
           variant: "destructive",
         });
         return;
@@ -143,6 +155,15 @@ export default function RegisterStudent() {
         toast({
           title: "Professor Email Required",
           description: "Please enter your nominating professor's email address.",
+          variant: "destructive",
+        });
+        return;
+      }
+      // Professor email format validation
+      if (!emailRegex.test(studentData.professorEmail.trim())) {
+        toast({
+          title: "Invalid Professor Email Format",
+          description: "Please enter a valid email address for the professor.",
           variant: "destructive",
         });
         return;
