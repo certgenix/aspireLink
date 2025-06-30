@@ -254,13 +254,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const students = await storage.getAllStudentRegistrations();
       const mentors = await storage.getAllMentorRegistrations();
+      const assignments = await storage.getAllAssignments();
       
       const stats = {
         totalStudents: students.length,
         totalMentors: mentors.length,
         activeStudents: students.filter(s => s.isActive).length,
         activeMentors: mentors.filter(m => m.isActive).length,
-        totalAssignments: 0 // Will be implemented when assignments are added
+        totalAssignments: assignments.length
       };
       
       res.json(stats);
