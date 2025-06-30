@@ -23,17 +23,24 @@ interface StudentData {
   nominatedBy: string;
   professorEmail: string;
   careerInterests: string;
-  preferredIndustries: string[];
-  mentoringTopics: string;
+  preferredDisciplines: string[];
+  mentoringTopics: string[];
   mentorshipGoals: string;
   agreedToCommitment: boolean;
   consentToContact: boolean;
 }
 
-const industryOptions = [
-  "Technology", "Finance", "Healthcare", "Engineering", "Marketing",
-  "Consulting", "Non-profit", "Education", "Government", "Media",
-  "Law", "Research", "Entrepreneurship", "Manufacturing", "Retail"
+const disciplines = [
+  "Computer Science", "Engineering", "Business", "Marketing", "Design", 
+  "Data Science", "Product Management", "Finance", "Healthcare", "Education",
+  "Non-Profit", "Consulting", "Sales", "Operations", "Research"
+];
+
+const mentoringTopics = [
+  "Career Planning", "Technical Skills", "Leadership", "Networking", 
+  "Interview Preparation", "Resume Building", "Industry Insights", 
+  "Work-Life Balance", "Entrepreneurship", "Professional Development",
+  "Communication Skills", "Project Management", "Team Building"
 ];
 
 const yearOfStudyOptions = [
@@ -55,8 +62,8 @@ export default function RegisterStudent() {
     nominatedBy: "",
     professorEmail: "",
     careerInterests: "",
-    preferredIndustries: [],
-    mentoringTopics: "",
+    preferredDisciplines: [],
+    mentoringTopics: [],
     mentorshipGoals: "",
     agreedToCommitment: false,
     consentToContact: false
@@ -94,19 +101,35 @@ export default function RegisterStudent() {
     },
   });
 
-  const toggleIndustry = (industry: string) => {
+  const toggleDiscipline = (discipline: string) => {
     setStudentData(prev => ({
       ...prev,
-      preferredIndustries: prev.preferredIndustries.includes(industry)
-        ? prev.preferredIndustries.filter(i => i !== industry)
-        : [...prev.preferredIndustries, industry]
+      preferredDisciplines: prev.preferredDisciplines.includes(discipline)
+        ? prev.preferredDisciplines.filter(d => d !== discipline)
+        : [...prev.preferredDisciplines, discipline]
     }));
   };
 
-  const removeIndustry = (industry: string) => {
+  const removeDiscipline = (discipline: string) => {
     setStudentData(prev => ({
       ...prev,
-      preferredIndustries: prev.preferredIndustries.filter(i => i !== industry)
+      preferredDisciplines: prev.preferredDisciplines.filter(d => d !== discipline)
+    }));
+  };
+
+  const toggleMentoringTopic = (topic: string) => {
+    setStudentData(prev => ({
+      ...prev,
+      mentoringTopics: prev.mentoringTopics.includes(topic)
+        ? prev.mentoringTopics.filter(t => t !== topic)
+        : [...prev.mentoringTopics, topic]
+    }));
+  };
+
+  const removeMentoringTopic = (topic: string) => {
+    setStudentData(prev => ({
+      ...prev,
+      mentoringTopics: prev.mentoringTopics.filter(t => t !== topic)
     }));
   };
 
@@ -179,18 +202,18 @@ export default function RegisterStudent() {
         });
         return;
       }
-      if (studentData.preferredIndustries.length === 0) {
+      if (studentData.preferredDisciplines.length === 0) {
         toast({
-          title: "Industry Preferences Required",
-          description: "Please select at least one industry preference.",
+          title: "Academic Disciplines Required",
+          description: "Please select at least one academic discipline.",
           variant: "destructive",
         });
         return;
       }
-      if (!studentData.mentoringTopics.trim()) {
+      if (studentData.mentoringTopics.length === 0) {
         toast({
           title: "Mentoring Topics Required",
-          description: "Please describe what topics you'd like mentoring on.",
+          description: "Please select at least one mentoring topic.",
           variant: "destructive",
         });
         return;
@@ -228,8 +251,8 @@ export default function RegisterStudent() {
       nominatedBy: studentData.nominatedBy,
       professorEmail: studentData.professorEmail,
       careerInterests: studentData.careerInterests.trim() || null,
-      preferredIndustries: studentData.preferredIndustries.length > 0 ? studentData.preferredIndustries : null,
-      mentoringTopics: studentData.mentoringTopics.trim() || null,
+      preferredDisciplines: studentData.preferredDisciplines.length > 0 ? studentData.preferredDisciplines : null,
+      mentoringTopics: studentData.mentoringTopics.length > 0 ? studentData.mentoringTopics : null,
       mentorshipGoals: studentData.mentorshipGoals.trim() || null,
       agreedToCommitment: studentData.agreedToCommitment,
       consentToContact: studentData.consentToContact,
@@ -514,32 +537,32 @@ export default function RegisterStudent() {
               </div>
 
               <div>
-                <Label className="text-base font-medium">Preferred Mentor Industry *</Label>
+                <Label className="text-base font-medium">Academic Disciplines *</Label>
                 <p className="text-sm text-gray-500 mb-3">
-                  Select at least one industry you're interested in learning about
+                  Select at least one academic discipline you're studying or interested in
                 </p>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
-                  {industryOptions.map((industry) => (
+                  {disciplines.map((discipline) => (
                     <Button
-                      key={industry}
-                      variant={studentData.preferredIndustries.includes(industry) ? "default" : "outline"}
-                      onClick={() => toggleIndustry(industry)}
+                      key={discipline}
+                      variant={studentData.preferredDisciplines.includes(discipline) ? "default" : "outline"}
+                      onClick={() => toggleDiscipline(discipline)}
                       className="justify-start h-auto py-2"
                     >
-                      {industry}
+                      {discipline}
                     </Button>
                   ))}
                 </div>
-                {studentData.preferredIndustries.length > 0 && (
+                {studentData.preferredDisciplines.length > 0 && (
                   <div className="space-y-2">
-                    <p className="text-sm font-medium">Selected Industries:</p>
+                    <p className="text-sm font-medium">Selected Disciplines:</p>
                     <div className="flex flex-wrap gap-2">
-                      {studentData.preferredIndustries.map((industry) => (
-                        <Badge key={industry} variant="secondary" className="flex items-center gap-1">
-                          {industry}
+                      {studentData.preferredDisciplines.map((discipline) => (
+                        <Badge key={discipline} variant="secondary" className="flex items-center gap-1">
+                          {discipline}
                           <X
                             className="w-3 h-3 cursor-pointer hover:text-red-500"
-                            onClick={() => removeIndustry(industry)}
+                            onClick={() => removeDiscipline(discipline)}
                           />
                         </Badge>
                       ))}
@@ -549,16 +572,38 @@ export default function RegisterStudent() {
               </div>
 
               <div>
-                <Label htmlFor="mentoringTopics" className="text-base font-medium">
-                  Topics you'd like to discuss with a mentor *
-                </Label>
-                <Textarea
-                  id="mentoringTopics"
-                  value={studentData.mentoringTopics}
-                  onChange={(e) => setStudentData({...studentData, mentoringTopics: e.target.value})}
-                  placeholder="e.g., Career planning, networking, industry insights, skill development, interview preparation..."
-                  className="mt-2 min-h-[80px]"
-                />
+                <Label className="text-base font-medium">Mentoring Topics *</Label>
+                <p className="text-sm text-gray-500 mb-3">
+                  Select topics you'd like guidance on from your mentor
+                </p>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
+                  {mentoringTopics.map((topic) => (
+                    <Button
+                      key={topic}
+                      variant={studentData.mentoringTopics.includes(topic) ? "default" : "outline"}
+                      onClick={() => toggleMentoringTopic(topic)}
+                      className="justify-start h-auto py-2"
+                    >
+                      {topic}
+                    </Button>
+                  ))}
+                </div>
+                {studentData.mentoringTopics.length > 0 && (
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium">Selected Topics:</p>
+                    <div className="flex flex-wrap gap-2">
+                      {studentData.mentoringTopics.map((topic) => (
+                        <Badge key={topic} variant="secondary" className="flex items-center gap-1">
+                          {topic}
+                          <X
+                            className="w-3 h-3 cursor-pointer hover:text-red-500"
+                            onClick={() => removeMentoringTopic(topic)}
+                          />
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div>

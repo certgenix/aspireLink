@@ -138,6 +138,7 @@ Changelog:
 - June 30, 2025. Updated mentor registration form validation: Made Current Job Title field mandatory in step 1, changed location placeholder to "City, Province", and made agreement and consent checkboxes mandatory in step 2 with proper validation error messages.
 - June 30, 2025. Enhanced mentor registration step 2 validation: Made "Preferred Student Disciplines" and "Mentoring Topics" fields mandatory with selection validation and updated field labels and descriptions to reflect required status.
 - June 30, 2025. Made "Availability" field mandatory in mentor registration step 2 with validation requiring at least one time slot selection and updated field label and description to reflect required status.
+- June 30, 2025. Updated student registration form for better mentor matching: replaced "Preferred Mentor Industry" with "Academic Disciplines" field matching mentor registration structure, converted "Mentoring Topics" from textarea to selection interface matching mentor options, updated database schema to use arrays for both fields enabling precise mentor-student matching based on shared disciplines and topics.
 - June 29, 2025. Integrated custom AspireLink logo (handshake design) into navigation header and updated favicon, added SEO meta tags with proper title and description
 - June 29, 2025. Added professional student collaboration image to For Students page with accurate founding cohort messaging instead of false success statistics
 

@@ -116,7 +116,7 @@ export class MemStorage implements IStorage {
       nominatedBy: insertRegistration.nominatedBy,
       professorEmail: insertRegistration.professorEmail,
       careerInterests: insertRegistration.careerInterests || null,
-      preferredIndustries: insertRegistration.preferredIndustries || null,
+      preferredDisciplines: insertRegistration.preferredDisciplines || null,
       mentoringTopics: insertRegistration.mentoringTopics || null,
       mentorshipGoals: insertRegistration.mentorshipGoals || null,
       agreedToCommitment: insertRegistration.agreedToCommitment || false,

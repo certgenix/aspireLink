@@ -54,8 +54,8 @@ export const studentRegistrations = pgTable("student_registrations", {
   professorEmail: text("professor_email").notNull(),
   // Mentorship Matching
   careerInterests: text("career_interests"),
-  preferredIndustries: text("preferred_industries").array(),
-  mentoringTopics: text("mentoring_topics"),
+  preferredDisciplines: text("preferred_disciplines").array(),
+  mentoringTopics: text("mentoring_topics").array(),
   mentorshipGoals: text("mentorship_goals"),
   // Consent & Confirmation
   agreedToCommitment: boolean("agreed_to_commitment").default(false),
