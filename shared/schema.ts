@@ -19,24 +19,24 @@ export const contacts = pgTable("contacts", {
 
 export const mentorRegistrations = pgTable("mentor_registrations", {
   id: serial("id").primaryKey(),
-  // LinkedIn auto-filled data
+  // Professional data
   linkedinUrl: text("linkedin_url"),
   fullName: text("full_name").notNull(),
-  currentJobTitle: text("current_job_title").notNull(),
-  company: text("company").notNull(),
-  yearsExperience: integer("years_experience").notNull(),
+  currentJobTitle: text("current_job_title"),
+  company: text("company"),
+  yearsExperience: integer("years_experience"),
   education: text("education"),
   skills: text("skills").array(),
   location: text("location"),
   timeZone: text("time_zone"),
   profileSummary: text("profile_summary"),
   // Mentorship-specific fields
-  preferredDisciplines: text("preferred_disciplines").array().notNull(),
-  mentoringTopics: text("mentoring_topics").array().notNull(),
-  availability: text("availability").array().notNull(),
-  motivation: text("motivation").notNull(),
-  agreedToCommitment: boolean("agreed_to_commitment").notNull(),
-  consentToContact: boolean("consent_to_contact").notNull(),
+  preferredDisciplines: text("preferred_disciplines").array(),
+  mentoringTopics: text("mentoring_topics").array(),
+  availability: text("availability").array(),
+  motivation: text("motivation"),
+  agreedToCommitment: boolean("agreed_to_commitment").default(false),
+  consentToContact: boolean("consent_to_contact").default(false),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -52,23 +52,9 @@ export const insertContactSchema = createInsertSchema(contacts).pick({
   message: true,
 });
 
-export const insertMentorRegistrationSchema = createInsertSchema(mentorRegistrations).pick({
-  linkedinUrl: true,
-  fullName: true,
-  currentJobTitle: true,
-  company: true,
-  yearsExperience: true,
-  education: true,
-  skills: true,
-  location: true,
-  timeZone: true,
-  profileSummary: true,
-  preferredDisciplines: true,
-  mentoringTopics: true,
-  availability: true,
-  motivation: true,
-  agreedToCommitment: true,
-  consentToContact: true,
+export const insertMentorRegistrationSchema = createInsertSchema(mentorRegistrations).omit({
+  id: true,
+  createdAt: true,
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;

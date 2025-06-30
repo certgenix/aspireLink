@@ -169,46 +169,10 @@ export default function RegisterMentor() {
   const handleSubmit = () => {
     if (!linkedinData) return;
 
-    if (selectedDisciplines.length === 0) {
+    if (!linkedinData.fullName?.trim()) {
       toast({
-        title: "Selection Required",
-        description: "Please select at least one preferred discipline.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (selectedTopics.length === 0) {
-      toast({
-        title: "Selection Required", 
-        description: "Please select at least one mentoring topic.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (selectedAvailability.length === 0) {
-      toast({
-        title: "Selection Required",
-        description: "Please select your availability preferences.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (!motivation.trim()) {
-      toast({
-        title: "Motivation Required",
-        description: "Please explain why you want to be a mentor.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (!agreedToCommitment || !consentToContact) {
-      toast({
-        title: "Agreement Required",
-        description: "Please agree to the mentorship commitment and contact consent.",
+        title: "Name Required",
+        description: "Please enter your full name to complete registration.",
         variant: "destructive",
       });
       return;
@@ -217,18 +181,18 @@ export default function RegisterMentor() {
     const registrationData = {
       linkedinUrl: linkedinUrl || null,
       fullName: linkedinData.fullName,
-      currentJobTitle: linkedinData.currentJobTitle,
-      company: linkedinData.company,
-      yearsExperience: linkedinData.yearsExperience,
+      currentJobTitle: linkedinData.currentJobTitle || null,
+      company: linkedinData.company || null,
+      yearsExperience: linkedinData.yearsExperience || null,
       education: linkedinData.education || null,
       skills: linkedinData.skills || null,
       location: linkedinData.location || null,
       timeZone: linkedinData.timeZone || null,
       profileSummary: linkedinData.profileSummary || null,
-      preferredDisciplines: selectedDisciplines,
-      mentoringTopics: selectedTopics,
-      availability: selectedAvailability,
-      motivation,
+      preferredDisciplines: selectedDisciplines.length > 0 ? selectedDisciplines : null,
+      mentoringTopics: selectedTopics.length > 0 ? selectedTopics : null,
+      availability: selectedAvailability.length > 0 ? selectedAvailability : null,
+      motivation: motivation.trim() || null,
       agreedToCommitment,
       consentToContact
     };
@@ -332,7 +296,7 @@ export default function RegisterMentor() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="currentJobTitle">Current Job Title *</Label>
+                  <Label htmlFor="currentJobTitle">Current Job Title</Label>
                   <Input
                     id="currentJobTitle"
                     value={linkedinData?.currentJobTitle || ""}
@@ -352,7 +316,7 @@ export default function RegisterMentor() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="company">Company/Organization *</Label>
+                  <Label htmlFor="company">Company/Organization</Label>
                   <Input
                     id="company"
                     value={linkedinData?.company || ""}
@@ -372,7 +336,7 @@ export default function RegisterMentor() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="yearsExperience">Years of Experience *</Label>
+                  <Label htmlFor="yearsExperience">Years of Experience</Label>
                   <Input
                     id="yearsExperience"
                     type="number"
@@ -463,14 +427,10 @@ export default function RegisterMentor() {
               <div className="flex justify-end">
                 <Button 
                   onClick={() => {
-                    if (!linkedinData?.fullName?.trim() || 
-                        !linkedinData?.currentJobTitle?.trim() || 
-                        !linkedinData?.company?.trim() || 
-                        !linkedinData?.yearsExperience || 
-                        linkedinData?.yearsExperience <= 0) {
+                    if (!linkedinData?.fullName?.trim()) {
                       toast({
-                        title: "Required Fields Missing",
-                        description: "Please fill in your name, job title, company, and years of experience.",
+                        title: "Name Required",
+                        description: "Please enter your full name to continue.",
                         variant: "destructive",
                       });
                       return;
@@ -544,9 +504,9 @@ export default function RegisterMentor() {
               <CardContent className="space-y-6">
                 {/* Preferred Disciplines */}
                 <div>
-                  <Label className="text-base font-medium">Preferred Student Disciplines *</Label>
+                  <Label className="text-base font-medium">Preferred Student Disciplines</Label>
                   <p className="text-sm text-gray-500 mb-3">
-                    Select the fields where you can provide valuable mentorship
+                    Select the fields where you can provide valuable mentorship (optional)
                   </p>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                     {disciplines.map((discipline) => (
@@ -567,9 +527,9 @@ export default function RegisterMentor() {
 
                 {/* Mentoring Topics */}
                 <div>
-                  <Label className="text-base font-medium">Mentoring Topics *</Label>
+                  <Label className="text-base font-medium">Mentoring Topics</Label>
                   <p className="text-sm text-gray-500 mb-3">
-                    What areas can you help students with?
+                    What areas can you help students with? (optional)
                   </p>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                     {mentoringTopics.map((topic) => (
@@ -590,9 +550,9 @@ export default function RegisterMentor() {
 
                 {/* Availability */}
                 <div>
-                  <Label className="text-base font-medium">Availability *</Label>
+                  <Label className="text-base font-medium">Availability</Label>
                   <p className="text-sm text-gray-500 mb-3">
-                    When are you generally available for mentoring sessions?
+                    When are you generally available for mentoring sessions? (optional)
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {availabilityOptions.map((option) => (
@@ -615,7 +575,7 @@ export default function RegisterMentor() {
                 {/* Motivation */}
                 <div>
                   <Label htmlFor="motivation" className="text-base font-medium">
-                    Why do you want to be a mentor? *
+                    Why do you want to be a mentor?
                   </Label>
                   <Textarea
                     id="motivation"

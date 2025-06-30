@@ -68,14 +68,23 @@ export class MemStorage implements IStorage {
   async createMentorRegistration(insertRegistration: InsertMentorRegistration): Promise<MentorRegistration> {
     const id = this.currentMentorRegistrationId++;
     const registration: MentorRegistration = {
-      ...insertRegistration,
+      id,
       linkedinUrl: insertRegistration.linkedinUrl || null,
+      fullName: insertRegistration.fullName,
+      currentJobTitle: insertRegistration.currentJobTitle || null,
+      company: insertRegistration.company || null,
+      yearsExperience: insertRegistration.yearsExperience || null,
       education: insertRegistration.education || null,
       skills: insertRegistration.skills || null,
       location: insertRegistration.location || null,
       timeZone: insertRegistration.timeZone || null,
       profileSummary: insertRegistration.profileSummary || null,
-      id,
+      preferredDisciplines: insertRegistration.preferredDisciplines || null,
+      mentoringTopics: insertRegistration.mentoringTopics || null,
+      availability: insertRegistration.availability || null,
+      motivation: insertRegistration.motivation || null,
+      agreedToCommitment: insertRegistration.agreedToCommitment || false,
+      consentToContact: insertRegistration.consentToContact || false,
       createdAt: new Date()
     };
     this.mentorRegistrations.set(id, registration);
