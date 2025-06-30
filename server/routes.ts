@@ -32,7 +32,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // LinkedIn auto-fill simulation endpoint
+  // LinkedIn auto-fill endpoint - requires actual LinkedIn data extraction
   app.post("/api/linkedin-autofill", async (req, res) => {
     try {
       const { linkedinUrl } = req.body;
@@ -41,20 +41,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Invalid LinkedIn URL" });
       }
 
-      // Simulate LinkedIn data extraction (mock data)
-      const mockData = {
-        fullName: "Sarah Thompson",
-        currentJobTitle: "Senior Software Engineer",
-        company: "Tech Innovations Inc.",
-        yearsExperience: 7,
-        education: "MS Computer Science, Stanford University",
-        skills: ["JavaScript", "React", "Node.js", "Team Leadership", "Mentoring"],
-        location: "San Francisco, CA",
-        timeZone: "Pacific Time (PT)",
-        profileSummary: "Passionate software engineer with 7+ years of experience building scalable web applications. I love mentoring junior developers and sharing knowledge about modern software development practices."
-      };
-
-      res.json({ success: true, data: mockData });
+      // Real LinkedIn data extraction would require LinkedIn API or web scraping
+      // For security and legal reasons, we cannot scrape LinkedIn profiles
+      res.status(501).json({ 
+        error: "LinkedIn auto-fill requires LinkedIn API integration",
+        message: "Please contact support to enable LinkedIn integration for your organization."
+      });
     } catch (error) {
       console.error("Error in LinkedIn auto-fill:", error);
       res.status(500).json({ error: "Internal server error" });

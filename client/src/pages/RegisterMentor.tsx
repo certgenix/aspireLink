@@ -82,8 +82,8 @@ export default function RegisterMentor() {
     },
     onError: () => {
       toast({
-        title: "Auto-Fill Failed", 
-        description: "Unable to fetch LinkedIn profile data. Please check the URL and try again.",
+        title: "LinkedIn Integration Required", 
+        description: "LinkedIn auto-fill requires API integration. Please fill out the form manually.",
         variant: "destructive",
       });
     }
@@ -295,50 +295,189 @@ export default function RegisterMentor() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
-                <Linkedin className="w-5 h-5 text-blue-600" />
-                <span>Step 1: LinkedIn Auto-Fill (Optional)</span>
+                <User className="w-5 h-5 text-primary-custom" />
+                <span>Step 1: Professional Information</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div>
-                <Label htmlFor="linkedin-url">LinkedIn Profile URL</Label>
-                <div className="flex space-x-3 mt-2">
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="fullName">Full Name *</Label>
                   <Input
-                    id="linkedin-url"
-                    value={linkedinUrl}
-                    onChange={(e) => setLinkedinUrl(e.target.value)}
-                    placeholder="https://www.linkedin.com/in/your-profile"
-                    className="flex-1"
+                    id="fullName"
+                    value={linkedinData?.fullName || ""}
+                    onChange={(e) => setLinkedinData(prev => prev ? {...prev, fullName: e.target.value} : {
+                      fullName: e.target.value,
+                      currentJobTitle: "",
+                      company: "",
+                      yearsExperience: 0,
+                      education: "",
+                      skills: [],
+                      location: "",
+                      timeZone: "",
+                      profileSummary: ""
+                    })}
+                    placeholder="Your full name"
+                    className="mt-2"
                   />
-                  <Button 
-                    onClick={handleAutoFill}
-                    disabled={isAutoFilling || autoFillMutation.isPending}
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
-                  >
-                    {isAutoFilling || autoFillMutation.isPending ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      "Auto-Fill Profile"
-                    )}
-                  </Button>
                 </div>
+                <div>
+                  <Label htmlFor="currentJobTitle">Current Job Title *</Label>
+                  <Input
+                    id="currentJobTitle"
+                    value={linkedinData?.currentJobTitle || ""}
+                    onChange={(e) => setLinkedinData(prev => prev ? {...prev, currentJobTitle: e.target.value} : {
+                      fullName: "",
+                      currentJobTitle: e.target.value,
+                      company: "",
+                      yearsExperience: 0,
+                      education: "",
+                      skills: [],
+                      location: "",
+                      timeZone: "",
+                      profileSummary: ""
+                    })}
+                    placeholder="Senior Software Engineer"
+                    className="mt-2"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="company">Company/Organization *</Label>
+                  <Input
+                    id="company"
+                    value={linkedinData?.company || ""}
+                    onChange={(e) => setLinkedinData(prev => prev ? {...prev, company: e.target.value} : {
+                      fullName: "",
+                      currentJobTitle: "",
+                      company: e.target.value,
+                      yearsExperience: 0,
+                      education: "",
+                      skills: [],
+                      location: "",
+                      timeZone: "",
+                      profileSummary: ""
+                    })}
+                    placeholder="Your current company"
+                    className="mt-2"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="yearsExperience">Years of Experience *</Label>
+                  <Input
+                    id="yearsExperience"
+                    type="number"
+                    min="0"
+                    max="50"
+                    value={linkedinData?.yearsExperience || ""}
+                    onChange={(e) => setLinkedinData(prev => prev ? {...prev, yearsExperience: parseInt(e.target.value) || 0} : {
+                      fullName: "",
+                      currentJobTitle: "",
+                      company: "",
+                      yearsExperience: parseInt(e.target.value) || 0,
+                      education: "",
+                      skills: [],
+                      location: "",
+                      timeZone: "",
+                      profileSummary: ""
+                    })}
+                    placeholder="5"
+                    className="mt-2"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="education">Education</Label>
+                  <Input
+                    id="education"
+                    value={linkedinData?.education || ""}
+                    onChange={(e) => setLinkedinData(prev => prev ? {...prev, education: e.target.value} : {
+                      fullName: "",
+                      currentJobTitle: "",
+                      company: "",
+                      yearsExperience: 0,
+                      education: e.target.value,
+                      skills: [],
+                      location: "",
+                      timeZone: "",
+                      profileSummary: ""
+                    })}
+                    placeholder="MBA, University of California"
+                    className="mt-2"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="location">Location</Label>
+                  <Input
+                    id="location"
+                    value={linkedinData?.location || ""}
+                    onChange={(e) => setLinkedinData(prev => prev ? {...prev, location: e.target.value} : {
+                      fullName: "",
+                      currentJobTitle: "",
+                      company: "",
+                      yearsExperience: 0,
+                      education: "",
+                      skills: [],
+                      location: e.target.value,
+                      timeZone: "",
+                      profileSummary: ""
+                    })}
+                    placeholder="San Francisco, CA"
+                    className="mt-2"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label htmlFor="profileSummary">Professional Summary</Label>
+                <Textarea
+                  id="profileSummary"
+                  value={linkedinData?.profileSummary || ""}
+                  onChange={(e) => setLinkedinData(prev => prev ? {...prev, profileSummary: e.target.value} : {
+                    fullName: "",
+                    currentJobTitle: "",
+                    company: "",
+                    yearsExperience: 0,
+                    education: "",
+                    skills: [],
+                    location: "",
+                    timeZone: "",
+                    profileSummary: e.target.value
+                  })}
+                  placeholder="Brief description of your professional background and experience..."
+                  rows={3}
+                  className="mt-2"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="linkedinUrl">LinkedIn Profile URL (Optional)</Label>
+                <Input
+                  id="linkedinUrl"
+                  value={linkedinUrl}
+                  onChange={(e) => setLinkedinUrl(e.target.value)}
+                  placeholder="https://www.linkedin.com/in/your-profile"
+                  className="mt-2"
+                />
                 <p className="text-sm text-gray-500 mt-2">
-                  Enter your LinkedIn URL to automatically fill your professional information
+                  Your LinkedIn profile for verification purposes
                 </p>
               </div>
 
-              <Separator />
-
-              <div className="text-center">
-                <p className="text-gray-600 mb-4">
-                  Don't want to use LinkedIn auto-fill? No problem!
-                </p>
+              <div className="flex justify-end">
                 <Button 
-                  variant="outline" 
-                  onClick={handleSkipAutoFill}
-                  className="border-primary-custom text-primary-custom hover:bg-primary-custom hover:text-white"
+                  onClick={() => {
+                    if (!linkedinData?.fullName || !linkedinData?.currentJobTitle || !linkedinData?.company || !linkedinData?.yearsExperience) {
+                      toast({
+                        title: "Required Fields Missing",
+                        description: "Please fill in your name, job title, company, and years of experience.",
+                        variant: "destructive",
+                      });
+                      return;
+                    }
+                    setStep(2);
+                  }}
+                  className="bg-primary-custom hover:bg-primary-dark text-white"
                 >
-                  Skip and Fill Manually
+                  Continue to Preferences
                 </Button>
               </div>
             </CardContent>
