@@ -394,6 +394,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Bulk delete assignments endpoint
+  app.post("/api/admin/assignments/bulk-delete", async (req, res) => {
+    try {
+      const { assignmentIds } = req.body;
+      
+      if (!Array.isArray(assignmentIds) || assignmentIds.length === 0) {
+        return res.status(400).json({ error: "Invalid assignment IDs" });
+      }
+
+      // Delete all assignments
+      for (const id of assignmentIds) {
+        await storage.deleteAssignment(parseInt(id));
+      }
+
+      res.json({ 
+        success: true, 
+        deletedCount: assignmentIds.length,
+        message: `Successfully deleted ${assignmentIds.length} assignment(s)` 
+      });
+    } catch (error) {
+      console.error("Bulk delete assignments error:", error);
+      res.status(500).json({ success: false, error: "Failed to delete assignments" });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;

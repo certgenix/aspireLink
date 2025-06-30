@@ -82,7 +82,7 @@ export default function AdminLogin() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter admin email address"
+                  placeholder="admin@example.com"
                   className="mt-2"
                   required
                 />
