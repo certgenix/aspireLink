@@ -178,6 +178,33 @@ export default function RegisterMentor() {
       return;
     }
 
+    if (!linkedinData.currentJobTitle?.trim()) {
+      toast({
+        title: "Job Title Required",
+        description: "Please enter your current job title to complete registration.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!agreedToCommitment) {
+      toast({
+        title: "Agreement Required",
+        description: "Please agree to the mentor commitment to complete registration.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!consentToContact) {
+      toast({
+        title: "Consent Required",
+        description: "Please consent to being contacted by AspireLink to complete registration.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const registrationData = {
       linkedinUrl: linkedinUrl || null,
       fullName: linkedinData.fullName,
@@ -296,7 +323,7 @@ export default function RegisterMentor() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="currentJobTitle">Current Job Title</Label>
+                  <Label htmlFor="currentJobTitle">Current Job Title *</Label>
                   <Input
                     id="currentJobTitle"
                     value={linkedinData?.currentJobTitle || ""}
@@ -394,7 +421,7 @@ export default function RegisterMentor() {
                       timeZone: "",
                       profileSummary: ""
                     })}
-                    placeholder="San Francisco, CA"
+                    placeholder="City, Province"
                     className="mt-2"
                   />
                 </div>
