@@ -644,17 +644,7 @@ export default function RegisterStudent() {
           </Card>
         )}
 
-        {/* Help Section */}
-        <div className="text-center mt-12">
-          <p className="text-gray-600 mb-4">
-            Need help with your application?
-          </p>
-          <Link href="/contact">
-            <Button variant="outline" className="px-6 py-2">
-              Contact Support
-            </Button>
-          </Link>
-        </div>
+
       </div>
     </div>
   );
