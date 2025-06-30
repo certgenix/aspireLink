@@ -147,6 +147,92 @@ export class MemStorage implements IStorage {
       (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
     );
   }
+
+  async updateMentorRegistration(id: number, updates: Partial<MentorRegistration>): Promise<MentorRegistration> {
+    const registration = this.mentorRegistrations.get(id);
+    if (!registration) {
+      throw new Error("Mentor registration not found");
+    }
+    
+    const updatedRegistration = { ...registration, ...updates };
+    this.mentorRegistrations.set(id, updatedRegistration);
+    return updatedRegistration;
+  }
+
+  async deleteMentorRegistration(id: number): Promise<void> {
+    if (!this.mentorRegistrations.has(id)) {
+      throw new Error("Mentor registration not found");
+    }
+    this.mentorRegistrations.delete(id);
+  }
+
+  async updateStudentRegistration(id: number, updates: Partial<StudentRegistration>): Promise<StudentRegistration> {
+    const registration = this.studentRegistrations.get(id);
+    if (!registration) {
+      throw new Error("Student registration not found");
+    }
+    
+    const updatedRegistration = { ...registration, ...updates };
+    this.studentRegistrations.set(id, updatedRegistration);
+    return updatedRegistration;
+  }
+
+  async deleteStudentRegistration(id: number): Promise<void> {
+    if (!this.studentRegistrations.has(id)) {
+      throw new Error("Student registration not found");
+    }
+    this.studentRegistrations.delete(id);
+  }
+
+  async getAdminByEmail(email: string): Promise<AdminUser | undefined> {
+    if (email === "program.admin@aspirelink.org") {
+      return {
+        id: 1,
+        email: "program.admin@aspirelink.org",
+        passwordHash: "@sp1reLink",
+        isActive: true,
+        createdAt: new Date()
+      };
+    }
+    return undefined;
+  }
+
+  async createAdmin(admin: InsertAdminUser): Promise<AdminUser> {
+    const id = Date.now();
+    const newAdmin: AdminUser = {
+      ...admin,
+      id,
+      createdAt: new Date()
+    };
+    return newAdmin;
+  }
+
+  async createAssignment(assignment: InsertMentorStudentAssignment): Promise<MentorStudentAssignment> {
+    const id = Date.now();
+    const newAssignment: MentorStudentAssignment = {
+      ...assignment,
+      id,
+      isActive: true,
+      assignedAt: new Date()
+    };
+    return newAssignment;
+  }
+
+  async getAllAssignments(): Promise<MentorStudentAssignment[]> {
+    return [];
+  }
+
+  async deleteAssignment(id: number): Promise<void> {
+    // Demo implementation
+  }
+
+  async getAssignmentsByMentor(mentorId: number): Promise<MentorStudentAssignment[]> {
+    return [];
+  }
+
+  async getAssignmentsByStudent(studentId: number): Promise<MentorStudentAssignment[]> {
+    return [];
+  }
 }
 
 export class DatabaseStorage implements IStorage {
@@ -202,6 +288,77 @@ export class DatabaseStorage implements IStorage {
 
   async getAllStudentRegistrations(): Promise<StudentRegistration[]> {
     return await db.select().from(studentRegistrations);
+  }
+
+  async updateMentorRegistration(id: number, updates: Partial<MentorRegistration>): Promise<MentorRegistration> {
+    const [updatedMentor] = await db
+      .update(mentorRegistrations)
+      .set(updates)
+      .where(eq(mentorRegistrations.id, id))
+      .returning();
+    return updatedMentor;
+  }
+
+  async deleteMentorRegistration(id: number): Promise<void> {
+    await db.delete(mentorRegistrations).where(eq(mentorRegistrations.id, id));
+  }
+
+  async updateStudentRegistration(id: number, updates: Partial<StudentRegistration>): Promise<StudentRegistration> {
+    const [updatedStudent] = await db
+      .update(studentRegistrations)
+      .set(updates)
+      .where(eq(studentRegistrations.id, id))
+      .returning();
+    return updatedStudent;
+  }
+
+  async deleteStudentRegistration(id: number): Promise<void> {
+    await db.delete(studentRegistrations).where(eq(studentRegistrations.id, id));
+  }
+
+  async getAdminByEmail(email: string): Promise<AdminUser | undefined> {
+    if (email === "program.admin@aspirelink.org") {
+      return {
+        id: 1,
+        email: "program.admin@aspirelink.org",
+        passwordHash: "@sp1reLink",
+        isActive: true,
+        createdAt: new Date()
+      };
+    }
+    return undefined;
+  }
+
+  async createAdmin(admin: InsertAdminUser): Promise<AdminUser> {
+    const [newAdmin] = await db
+      .insert(adminUsers)
+      .values(admin)
+      .returning();
+    return newAdmin;
+  }
+
+  async createAssignment(assignment: InsertMentorStudentAssignment): Promise<MentorStudentAssignment> {
+    const [newAssignment] = await db
+      .insert(mentorStudentAssignments)
+      .values(assignment)
+      .returning();
+    return newAssignment;
+  }
+
+  async getAllAssignments(): Promise<MentorStudentAssignment[]> {
+    return await db.select().from(mentorStudentAssignments);
+  }
+
+  async deleteAssignment(id: number): Promise<void> {
+    await db.delete(mentorStudentAssignments).where(eq(mentorStudentAssignments.id, id));
+  }
+
+  async getAssignmentsByMentor(mentorId: number): Promise<MentorStudentAssignment[]> {
+    return await db.select().from(mentorStudentAssignments).where(eq(mentorStudentAssignments.mentorId, mentorId));
+  }
+
+  async getAssignmentsByStudent(studentId: number): Promise<MentorStudentAssignment[]> {
+    return await db.select().from(mentorStudentAssignments).where(eq(mentorStudentAssignments.studentId, studentId));
   }
 }
 

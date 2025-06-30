@@ -133,6 +133,68 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin get single student endpoint
+  app.get("/api/admin/students/:id", async (req, res) => {
+    try {
+      const studentId = parseInt(req.params.id);
+      const students = await storage.getAllStudentRegistrations();
+      const student = students.find(s => s.id === studentId);
+      
+      if (!student) {
+        return res.status(404).json({ error: "Student not found" });
+      }
+      
+      res.json(student);
+    } catch (error) {
+      console.error("Error fetching student:", error);
+      res.status(500).json({ error: "Failed to fetch student" });
+    }
+  });
+
+  // Admin get single mentor endpoint
+  app.get("/api/admin/mentors/:id", async (req, res) => {
+    try {
+      const mentorId = parseInt(req.params.id);
+      const mentors = await storage.getAllMentorRegistrations();
+      const mentor = mentors.find(m => m.id === mentorId);
+      
+      if (!mentor) {
+        return res.status(404).json({ error: "Mentor not found" });
+      }
+      
+      res.json(mentor);
+    } catch (error) {
+      console.error("Error fetching mentor:", error);
+      res.status(500).json({ error: "Failed to fetch mentor" });
+    }
+  });
+
+  // Admin update student endpoint
+  app.put("/api/admin/students/:id", async (req, res) => {
+    try {
+      const studentId = parseInt(req.params.id);
+      const updateData = req.body;
+      const updatedStudent = await storage.updateStudentRegistration(studentId, updateData);
+      res.json(updatedStudent);
+    } catch (error) {
+      console.error("Error updating student:", error);
+      res.status(500).json({ error: "Failed to update student" });
+    }
+  });
+
+  // Admin update mentor endpoint
+  app.put("/api/admin/mentors/:id", async (req, res) => {
+    try {
+      const mentorId = parseInt(req.params.id);
+      const updateData = req.body;
+      const updatedMentor = await storage.updateMentorRegistration(mentorId, updateData);
+      res.json(updatedMentor);
+    } catch (error) {
+      console.error("Error updating mentor:", error);
+      res.status(500).json({ error: "Failed to update mentor" });
+    }
+  });
+
   // Admin authentication endpoint
   app.post("/api/admin/login", async (req, res) => {
     try {

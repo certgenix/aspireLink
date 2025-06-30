@@ -19,6 +19,8 @@ import AdminDashboard from "@/pages/AdminDashboard";
 import CreateStudent from "@/pages/CreateStudent";
 import CreateMentor from "@/pages/CreateMentor";
 import CreateAssignment from "@/pages/CreateAssignment";
+import EditStudent from "@/pages/EditStudent";
+import EditMentor from "@/pages/EditMentor";
 
 function Router() {
   return (
@@ -39,6 +41,8 @@ function Router() {
           <Route path="/admin/create-student" component={CreateStudent} />
           <Route path="/admin/create-mentor" component={CreateMentor} />
           <Route path="/admin/create-assignment" component={CreateAssignment} />
+          <Route path="/admin/edit-student/:id" component={EditStudent} />
+          <Route path="/admin/edit-mentor/:id" component={EditMentor} />
           <Route component={NotFound} />
         </Switch>
       </main>

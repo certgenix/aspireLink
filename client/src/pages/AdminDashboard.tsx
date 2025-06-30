@@ -369,7 +369,11 @@ export default function AdminDashboard() {
                         >
                           {student.isActive ? <UserX className="w-4 h-4" /> : <UserCheck className="w-4 h-4" />}
                         </Button>
-                        <Button size="sm" variant="outline">
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => setLocation(`/admin/edit-student/${student.id}`)}
+                        >
                           <Edit className="w-4 h-4" />
                         </Button>
                         <Button
@@ -437,7 +441,11 @@ export default function AdminDashboard() {
                         >
                           {mentor.isActive ? <UserX className="w-4 h-4" /> : <UserCheck className="w-4 h-4" />}
                         </Button>
-                        <Button size="sm" variant="outline">
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => setLocation(`/admin/edit-mentor/${mentor.id}`)}
+                        >
                           <Edit className="w-4 h-4" />
                         </Button>
                         <Button
