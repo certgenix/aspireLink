@@ -335,7 +335,10 @@ export default function AdminDashboard() {
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
                   <span>Student Management</span>
-                  <Button className="bg-primary-custom hover:bg-primary-dark">
+                  <Button 
+                    className="bg-primary-custom hover:bg-primary-dark"
+                    onClick={() => setLocation("/admin/create-student")}
+                  >
                     <Plus className="w-4 h-4 mr-2" />
                     Add Student
                   </Button>
@@ -396,7 +399,10 @@ export default function AdminDashboard() {
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
                   <span>Mentor Management</span>
-                  <Button className="bg-secondary-custom hover:bg-secondary-dark">
+                  <Button 
+                    className="bg-secondary-custom hover:bg-secondary-dark"
+                    onClick={() => setLocation("/admin/create-mentor")}
+                  >
                     <Plus className="w-4 h-4 mr-2" />
                     Add Mentor
                   </Button>
@@ -461,7 +467,10 @@ export default function AdminDashboard() {
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
                   <span>Mentor-Student Assignments</span>
-                  <Button className="bg-accent-custom hover:bg-accent-dark">
+                  <Button 
+                    className="bg-accent-custom hover:bg-accent-dark"
+                    onClick={() => setLocation("/admin/create-assignment")}
+                  >
                     <Plus className="w-4 h-4 mr-2" />
                     Create Assignment
                   </Button>

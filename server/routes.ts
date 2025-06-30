@@ -109,6 +109,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin create student endpoint
+  app.post("/api/admin/students", async (req, res) => {
+    try {
+      const studentData = req.body;
+      const newStudent = await storage.createStudentRegistration(studentData);
+      res.json(newStudent);
+    } catch (error) {
+      console.error("Error creating student:", error);
+      res.status(500).json({ error: "Failed to create student" });
+    }
+  });
+
+  // Admin create mentor endpoint
+  app.post("/api/admin/mentors", async (req, res) => {
+    try {
+      const mentorData = req.body;
+      const newMentor = await storage.createMentorRegistration(mentorData);
+      res.json(newMentor);
+    } catch (error) {
+      console.error("Error creating mentor:", error);
+      res.status(500).json({ error: "Failed to create mentor" });
+    }
+  });
+
   // Admin authentication endpoint
   app.post("/api/admin/login", async (req, res) => {
     try {
