@@ -20,7 +20,7 @@ export default function FAQ() {
     {
       question: "Is there a cost to participate?",
       answer:
-        "AspireLink is completely free for both students and mentors. Our program is funded by university partnerships and corporate sponsors who believe in the power of mentorship.",
+        "AspireLink is completely free for both students and mentors. Our program is entirely volunteer-based, with mentors generously donating their time and expertise to help the next generation of professionals succeed.",
     },
     {
       question: "What happens after the 4-month program ends?",

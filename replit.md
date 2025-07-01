@@ -147,6 +147,7 @@ Changelog:
 - June 29, 2025. Integrated custom AspireLink logo (handshake design) into navigation header and updated favicon, added SEO meta tags with proper title and description
 - June 29, 2025. Added professional student collaboration image to For Students page with accurate founding cohort messaging instead of false success statistics
 - July 1, 2025. Fixed all icon display issues on Home page by replacing problematic lucide-react imports with emoji characters: process steps now show 📄 (nomination), 👥 (matching), 📅 (sessions), 🏆 (recognition), and features show 🎯 (personalized matching), 📈 (structured program), 🌟 (industry networks)
+- July 1, 2025. Corrected FAQ answer about program funding to accurately reflect that AspireLink is entirely volunteer-based, not funded by university partnerships or sponsors
 
 ## User Preferences
 
