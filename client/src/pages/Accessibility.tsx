@@ -87,17 +87,6 @@ export default function Accessibility() {
                     <li>Provide feedback on accessibility improvements</li>
                   </ul>
 
-                  <h2 className="text-2xl font-bold text-charcoal-custom mb-4">Common Accommodations</h2>
-                  <p className="text-gray-700 mb-4">We can provide support including:</p>
-                  <ul className="list-disc pl-6 text-gray-700 mb-6">
-                    <li>Extended deadlines for program requirements</li>
-                    <li>Alternative formats for reading materials (large print, audio, digital)</li>
-                    <li>Assistive technology support and training</li>
-                    <li>Note-taking assistance during sessions</li>
-                    <li>Modified communication preferences</li>
-                    <li>Flexible participation options</li>
-                  </ul>
-
                   <h2 className="text-2xl font-bold text-charcoal-custom mb-4">Ongoing Improvements</h2>
                   <p className="text-gray-700 mb-6">
                     We continuously work to improve accessibility through regular audits, user testing with disabled participants, staff training on accessibility best practices, and implementing feedback from our community.
