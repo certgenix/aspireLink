@@ -149,6 +149,7 @@ Changelog:
 - July 1, 2025. Fixed all icon display issues on Home page by replacing problematic lucide-react imports with emoji characters: process steps now show 📄 (nomination), 👥 (matching), 📅 (sessions), 🏆 (recognition), and features show 🎯 (personalized matching), 📈 (structured program), 🌟 (industry networks)
 - July 1, 2025. Corrected FAQ answer about program funding to accurately reflect that AspireLink is entirely volunteer-based, not funded by university partnerships or sponsors
 - July 1, 2025. Cleaned up contact information across all policy pages: removed fictional Toronto addresses from Privacy Policy, Terms of Service, and Accessibility pages; removed phone numbers from Code of Conduct and Accessibility pages; all pages now only show appropriate email contact information
+- July 1, 2025. Updated Accessibility page to show accurate Web Accessibility Standards (WCAG 2.1 Level AA, semantic HTML, keyboard navigation) and realistic Supported Technologies (screen readers, browser tools, high contrast) removing unverified compliance claims
 
 ## User Preferences
 

@@ -32,12 +32,12 @@ export default function Accessibility() {
                   </p>
 
                   <h2 className="text-2xl font-bold text-charcoal-custom mb-4">Web Accessibility Standards</h2>
-                  <p className="text-gray-700 mb-4">Our website and platform aim to meet or exceed:</p>
+                  <p className="text-gray-700 mb-4">Our website and platform strive to meet:</p>
                   <ul className="list-disc pl-6 text-gray-700 mb-6">
                     <li>Web Content Accessibility Guidelines (WCAG) 2.1 Level AA standards</li>
-                    <li>Section 508 compliance for federal accessibility requirements</li>
-                    <li>AODA (Accessibility for Ontarians with Disabilities Act) standards</li>
-                    <li>International accessibility best practices</li>
+                    <li>Modern web accessibility best practices</li>
+                    <li>Semantic HTML structure with proper heading hierarchy</li>
+                    <li>Keyboard navigation and screen reader compatibility</li>
                   </ul>
 
                   <h2 className="text-2xl font-bold text-charcoal-custom mb-4">Accessibility Features</h2>
@@ -63,14 +63,13 @@ export default function Accessibility() {
                   </ul>
 
                   <h2 className="text-2xl font-bold text-charcoal-custom mb-4">Supported Technologies</h2>
-                  <p className="text-gray-700 mb-4">Our platform is tested with:</p>
+                  <p className="text-gray-700 mb-4">Our platform works with commonly used assistive technologies:</p>
                   <ul className="list-disc pl-6 text-gray-700 mb-6">
-                    <li>JAWS (Job Access With Speech)</li>
-                    <li>NVDA (NonVisual Desktop Access)</li>
-                    <li>VoiceOver (macOS and iOS)</li>
-                    <li>TalkBack (Android)</li>
-                    <li>Dragon NaturallySpeaking</li>
-                    <li>Various browser zoom and magnification tools</li>
+                    <li>Screen readers (NVDA, JAWS, VoiceOver)</li>
+                    <li>Keyboard navigation and voice control software</li>
+                    <li>Browser zoom and magnification tools</li>
+                    <li>High contrast and dark mode display settings</li>
+                    <li>Modern web browsers with accessibility features</li>
                   </ul>
 
                   <h2 className="text-2xl font-bold text-charcoal-custom mb-4">Getting Accessibility Support</h2>
