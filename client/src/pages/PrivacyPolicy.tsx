@@ -89,8 +89,6 @@ export default function PrivacyPolicy() {
                     If you have questions about this Privacy Policy or our data practices, please contact us at:
                     <br />
                     <strong>Email:</strong> privacy@aspirelink.org
-                    <br />
-                    <strong>Address:</strong> AspireLink Privacy Officer, 123 University Ave, Toronto, ON M5S 3M2
                   </p>
                 </div>
               </CardContent>

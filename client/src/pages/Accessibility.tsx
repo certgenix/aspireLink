@@ -126,10 +126,6 @@ export default function Accessibility() {
                     <br />
                     <strong>Email:</strong> accessibility@aspirelink.org
                     <br />
-                    <strong>Phone:</strong> 1-800-277-4731 (TTY available)
-                    <br />
-                    <strong>Address:</strong> AspireLink Accessibility Office, 123 University Ave, Toronto, ON M5S 3M2
-                    <br />
                     <strong>Response Time:</strong> We aim to respond within 24 hours for urgent accessibility needs.
                   </p>
                 </div>

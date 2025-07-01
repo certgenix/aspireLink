@@ -121,8 +121,6 @@ export default function CodeOfConduct() {
                     <strong>Email:</strong> conduct@aspirelink.org
                     <br />
                     <strong>Emergency Contact:</strong> safety@aspirelink.org
-                    <br />
-                    <strong>Phone:</strong> 1-800-ASPIRE-1 (1-800-277-4731)
                   </p>
                 </div>
               </CardContent>

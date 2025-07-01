@@ -108,8 +108,6 @@ export default function TermsOfService() {
                     For questions about these Terms of Service, please contact us at:
                     <br />
                     <strong>Email:</strong> legal@aspirelink.org
-                    <br />
-                    <strong>Address:</strong> AspireLink Legal Department, 123 University Ave, Toronto, ON M5S 3M2
                   </p>
                 </div>
               </CardContent>
