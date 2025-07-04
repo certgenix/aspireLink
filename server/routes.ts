@@ -5,8 +5,109 @@ import { insertContactSchema, insertMentorRegistrationSchema, insertStudentRegis
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
+import { setupAuth, isAuthenticated } from "./replitAuth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Setup Replit Auth
+  await setupAuth(app);
+
+  // Auth endpoints
+  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      res.json(user);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ message: "Failed to fetch user" });
+    }
+  });
+
+  // Role check endpoint
+  app.get('/api/auth/check-role', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      res.json({ 
+        hasRole: !!user.role,
+        role: user.role,
+        needsRegistration: !user.role
+      });
+    } catch (error) {
+      console.error("Error checking user role:", error);
+      res.status(500).json({ message: "Failed to check role" });
+    }
+  });
+
+  // Role assignment endpoint
+  app.post('/api/auth/assign-role', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { role } = req.body;
+      
+      if (!role || !['student', 'mentor'].includes(role)) {
+        return res.status(400).json({ message: "Invalid role" });
+      }
+      
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      if (user.role && user.role !== role) {
+        return res.status(400).json({ 
+          message: `User already registered as ${user.role}`,
+          currentRole: user.role
+        });
+      }
+      
+      // Update user role
+      const updatedUser = await storage.upsertUser({
+        ...user,
+        role: role as 'student' | 'mentor'
+      });
+      
+      res.json({ 
+        success: true,
+        user: updatedUser,
+        redirectTo: role === 'student' ? '/register-student' : '/register-mentor'
+      });
+    } catch (error) {
+      console.error("Error assigning role:", error);
+      res.status(500).json({ message: "Failed to assign role" });
+    }
+  });
+
+  // Redirect endpoint after authentication
+  app.get('/api/auth/redirect', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (!user || !user.role) {
+        // New user without role - redirect to role selection
+        return res.redirect('/');
+      }
+      
+      // Existing user with role - redirect to appropriate registration page
+      if (user.role === 'mentor') {
+        return res.redirect('/register-mentor');
+      } else if (user.role === 'student') {
+        return res.redirect('/register-student');
+      }
+      
+      // Default redirect
+      res.redirect('/');
+    } catch (error) {
+      console.error("Error in auth redirect:", error);
+      res.redirect('/');
+    }
+  });
   // Contact form submission endpoint
   app.post("/api/contact", async (req, res) => {
     try {

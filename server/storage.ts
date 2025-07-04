@@ -1,12 +1,13 @@
-import { users, contacts, mentorRegistrations, studentRegistrations, adminUsers, mentorStudentAssignments, type User, type InsertUser, type Contact, type InsertContact, type MentorRegistration, type InsertMentorRegistration, type StudentRegistration, type InsertStudentRegistration, type AdminUser, type InsertAdminUser, type MentorStudentAssignment, type InsertMentorStudentAssignment } from "@shared/schema";
+import { users, contacts, mentorRegistrations, studentRegistrations, adminUsers, mentorStudentAssignments, type User, type UpsertUser, type Contact, type InsertContact, type MentorRegistration, type InsertMentorRegistration, type StudentRegistration, type InsertStudentRegistration, type AdminUser, type InsertAdminUser, type MentorStudentAssignment, type InsertMentorStudentAssignment } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 
 // Storage interface with CRUD operations
 export interface IStorage {
-  getUser(id: number): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  // User operations for Replit Auth
+  getUser(id: string): Promise<User | undefined>;
+  upsertUser(user: UpsertUser): Promise<User>;
+  getUserByEmail(email: string): Promise<User | undefined>;
   createContact(contact: InsertContact): Promise<Contact>;
   getAllContacts(): Promise<Contact[]>;
   createMentorRegistration(registration: InsertMentorRegistration): Promise<MentorRegistration>;
@@ -29,11 +30,10 @@ export interface IStorage {
 }
 
 export class MemStorage implements IStorage {
-  private users: Map<number, User>;
+  private users: Map<string, User>;
   private contacts: Map<number, Contact>;
   private mentorRegistrations: Map<number, MentorRegistration>;
   private studentRegistrations: Map<number, StudentRegistration>;
-  private currentUserId: number;
   private currentContactId: number;
   private currentMentorRegistrationId: number;
   private currentStudentRegistrationId: number;
@@ -43,27 +43,41 @@ export class MemStorage implements IStorage {
     this.contacts = new Map();
     this.mentorRegistrations = new Map();
     this.studentRegistrations = new Map();
-    this.currentUserId = 1;
     this.currentContactId = 1;
     this.currentMentorRegistrationId = 1;
     this.currentStudentRegistrationId = 1;
   }
 
-  async getUser(id: number): Promise<User | undefined> {
-    return this.users.get(id);
+  async getUser(id: string): Promise<User | undefined> {
+    return Array.from(this.users.values()).find(user => user.id === id);
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
+  async getUserByEmail(email: string): Promise<User | undefined> {
     return Array.from(this.users.values()).find(
-      (user) => user.username === username,
+      (user) => user.email === email,
     );
   }
 
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = this.currentUserId++;
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+  async upsertUser(userData: UpsertUser): Promise<User> {
+    const existingUser = await this.getUser(userData.id);
+    if (existingUser) {
+      const updatedUser = { ...existingUser, ...userData, updatedAt: new Date() };
+      this.users.set(existingUser.id, updatedUser);
+      return updatedUser;
+    } else {
+      const user: User = { 
+        id: userData.id,
+        email: userData.email ?? null,
+        firstName: userData.firstName ?? null,
+        lastName: userData.lastName ?? null,
+        profileImageUrl: userData.profileImageUrl ?? null,
+        role: userData.role ?? null,
+        createdAt: new Date(), 
+        updatedAt: new Date() 
+      };
+      this.users.set(user.id, user);
+      return user;
+    }
   }
 
   async createContact(insertContact: InsertContact): Promise<Contact> {
@@ -189,8 +203,7 @@ export class MemStorage implements IStorage {
       return {
         id: 1,
         email: "program.admin@aspirelink.org",
-        passwordHash: "@sp1reLink",
-        isActive: true,
+        password: "@sp1reLink",
         createdAt: new Date()
       };
     }
@@ -210,9 +223,10 @@ export class MemStorage implements IStorage {
   async createAssignment(assignment: InsertMentorStudentAssignment): Promise<MentorStudentAssignment> {
     const id = Date.now();
     const newAssignment: MentorStudentAssignment = {
-      ...assignment,
       id,
-      isActive: true,
+      mentorId: assignment.mentorId,
+      studentId: assignment.studentId,
+      isActive: assignment.isActive ?? true,
       assignedAt: new Date()
     };
     return newAssignment;
@@ -236,21 +250,29 @@ export class MemStorage implements IStorage {
 }
 
 export class DatabaseStorage implements IStorage {
-  async getUser(id: number): Promise<User | undefined> {
+  // User operations for Replit Auth
+  async getUser(id: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
-    return user || undefined;
+    return user;
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.username, username));
-    return user || undefined;
-  }
-
-  async createUser(insertUser: InsertUser): Promise<User> {
+  async upsertUser(userData: UpsertUser): Promise<User> {
     const [user] = await db
       .insert(users)
-      .values(insertUser)
+      .values(userData)
+      .onConflictDoUpdate({
+        target: users.id,
+        set: {
+          ...userData,
+          updatedAt: new Date(),
+        },
+      })
       .returning();
+    return user;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
     return user;
   }
 
@@ -321,8 +343,7 @@ export class DatabaseStorage implements IStorage {
       return {
         id: 1,
         email: "program.admin@aspirelink.org",
-        passwordHash: "@sp1reLink",
-        isActive: true,
+        password: "@sp1reLink",
         createdAt: new Date()
       };
     }

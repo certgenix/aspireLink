@@ -19,8 +19,130 @@ import {
 } from "lucide-react";
 import { Link } from "wouter";
 import brandedImagePath from "@assets/AspireLink-300-1_1751236725408.png";
+import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Home() {
+  const { user, isAuthenticated, isLoading } = useAuth();
+  const { toast } = useToast();
+
+  const handleStudentRegistration = async () => {
+    if (isLoading) return;
+    
+    if (!isAuthenticated) {
+      // Store intended role in session storage for post-login redirect
+      sessionStorage.setItem('pendingRole', 'student');
+      window.location.href = '/api/login';
+      return;
+    }
+    
+    // User is authenticated, check their role
+    if (user?.role === 'mentor') {
+      toast({
+        title: "Account Type Mismatch",
+        description: "You're already registered as a mentor. Please log out and create a new account to apply as a student.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (user?.role === 'student') {
+      toast({
+        title: "Already Registered",
+        description: "You're already registered as a student!",
+        variant: "default",
+      });
+      return;
+    }
+    
+    // User is authenticated but has no role, assign student role
+    try {
+      const response = await fetch('/api/auth/assign-role', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ role: 'student' }),
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        window.location.href = data.redirectTo;
+      } else {
+        const error = await response.json();
+        toast({
+          title: "Error",
+          description: error.message || "Failed to assign role",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to assign role. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleMentorRegistration = async () => {
+    if (isLoading) return;
+    
+    if (!isAuthenticated) {
+      // Store intended role in session storage for post-login redirect
+      sessionStorage.setItem('pendingRole', 'mentor');
+      window.location.href = '/api/login';
+      return;
+    }
+    
+    // User is authenticated, check their role
+    if (user?.role === 'student') {
+      toast({
+        title: "Account Type Mismatch",
+        description: "You're already registered as a student. Please log out and create a new account to apply as a mentor.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (user?.role === 'mentor') {
+      toast({
+        title: "Already Registered",
+        description: "You're already registered as a mentor!",
+        variant: "default",
+      });
+      return;
+    }
+    
+    // User is authenticated but has no role, assign mentor role
+    try {
+      const response = await fetch('/api/auth/assign-role', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ role: 'mentor' }),
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        window.location.href = data.redirectTo;
+      } else {
+        const error = await response.json();
+        toast({
+          title: "Error",
+          description: error.message || "Failed to assign role",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to assign role. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -38,32 +160,34 @@ export default function Home() {
                   with experienced professionals through 4-month academic cohorts.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
-                  <Link href="/register-student">
-                    <Button className="bg-primary-custom hover:bg-primary-dark text-white px-8 py-4 rounded-lg font-semibold text-lg shadow-lg">
-                      Apply as Student
-                    </Button>
-                  </Link>
-                  <Link href="/register-mentor">
-                    <Button
-                      variant="outline"
-                      className="border-2 px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200"
-                      style={{
-                        borderColor: '#2E86AB',
-                        color: '#2E86AB',
-                        backgroundColor: 'transparent'
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#2E86AB';
-                        e.currentTarget.style.color = '#ffffff';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'transparent';
-                        e.currentTarget.style.color = '#2E86AB';
-                      }}
-                    >
-                      Become a Mentor
-                    </Button>
-                  </Link>
+                  <Button 
+                    className="bg-primary-custom hover:bg-primary-dark text-white px-8 py-4 rounded-lg font-semibold text-lg shadow-lg"
+                    onClick={handleStudentRegistration}
+                    disabled={isLoading}
+                  >
+                    Apply as Student
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="border-2 px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200"
+                    style={{
+                      borderColor: '#2E86AB',
+                      color: '#2E86AB',
+                      backgroundColor: 'transparent'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#2E86AB';
+                      e.currentTarget.style.color = '#ffffff';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = '#2E86AB';
+                    }}
+                    onClick={handleMentorRegistration}
+                    disabled={isLoading}
+                  >
+                    Become a Mentor
+                  </Button>
                 </div>
                 <div className="flex items-center justify-center lg:justify-start space-x-6 text-sm" style={{color: '#2F3E46'}}>
                   <div className="flex items-center">
@@ -256,32 +380,34 @@ export default function Home() {
             their careers through meaningful mentorship.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/register-student">
-              <Button className="bg-white text-primary-custom hover:bg-gray-100 px-8 py-4 rounded-lg font-semibold text-lg">
-                Apply as Student
-              </Button>
-            </Link>
-            <Link href="/register-mentor">
-              <Button
-                variant="outline"
-                className="border-2 px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200"
-                style={{
-                  borderColor: '#ffffff',
-                  color: '#ffffff',
-                  backgroundColor: 'transparent'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#ffffff';
-                  e.currentTarget.style.color = '#2E86AB';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                  e.currentTarget.style.color = '#ffffff';
-                }}
-              >
-                Become a Mentor
-              </Button>
-            </Link>
+            <Button 
+              className="bg-white text-primary-custom hover:bg-gray-100 px-8 py-4 rounded-lg font-semibold text-lg"
+              onClick={handleStudentRegistration}
+              disabled={isLoading}
+            >
+              Apply as Student
+            </Button>
+            <Button
+              variant="outline"
+              className="border-2 px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200"
+              style={{
+                borderColor: '#ffffff',
+                color: '#ffffff',
+                backgroundColor: 'transparent'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#ffffff';
+                e.currentTarget.style.color = '#2E86AB';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'transparent';
+                e.currentTarget.style.color = '#ffffff';
+              }}
+              onClick={handleMentorRegistration}
+              disabled={isLoading}
+            >
+              Become a Mentor
+            </Button>
           </div>
         </div>
       </section>
