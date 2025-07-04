@@ -89,25 +89,21 @@ export async function setupAuth(app: Express) {
 
   const verify: VerifyFunction = async function(
     tokens: client.TokenEndpointResponse & client.TokenEndpointResponseHelpers,
-    verified: passport.AuthenticateCallback
+    verified: passport.AuthenticateCallback,
+    req?: any
   ) {
     try {
       const user = {};
       updateUserSession(user, tokens);
       
       // Check if there's a role intent in the session
-      const req = arguments[2] as any; // Access the request object
       const intentRole = req?.session?.roleIntent as UserRole;
       
       console.log("Authentication verify - User claims:", tokens.claims());
       console.log("Authentication verify - Role intent:", intentRole);
+      console.log("Authentication verify - Full session:", req?.session);
       
       await upsertUser(tokens.claims(), intentRole);
-      
-      // Clear role intent after use
-      if (req?.session?.roleIntent) {
-        delete req.session.roleIntent;
-      }
       
       console.log("Authentication verify - User session created:", user);
       verified(null, user);
@@ -170,27 +166,46 @@ export async function setupAuth(app: Express) {
   app.get("/api/callback", (req, res, next) => {
     passport.authenticate(`replitauth:${req.hostname}`, {
       failureRedirect: "/api/login",
-    })(req, res, (err: any) => {
+    })(req, res, async (err: any) => {
       if (err) {
         console.error("Authentication error:", err);
         return res.redirect("/api/login");
       }
       
-      // Handle role-based redirect after successful login
-      const roleIntent = req.session.roleIntent;
-      if (roleIntent) {
-        delete req.session.roleIntent; // Clear role intent from session
+      try {
+        // Get user's role from database and redirect accordingly
+        const user = req.user as any;
+        const userId = user?.claims?.sub;
         
-        switch (roleIntent) {
-          case 'student':
-            return res.redirect('/register-student');
-          case 'mentor':
-            return res.redirect('/register-mentor');
-          case 'admin':
-            return res.redirect('/admin/dashboard');
-          default:
-            return res.redirect('/dashboard');
+        if (userId) {
+          const dbUser = await storage.getUser(userId);
+          const userRole = dbUser?.role;
+          
+          console.log("Callback redirect - User role:", userRole);
+          
+          // Check if there was a role intent for first-time registration
+          const roleIntent = req.session.roleIntent;
+          if (roleIntent) {
+            delete req.session.roleIntent;
+            console.log("Callback redirect - Role intent:", roleIntent);
+          }
+          
+          // Redirect based on role intent (for registration) or user role (for existing users)
+          const targetRole = roleIntent || userRole;
+          
+          switch (targetRole) {
+            case 'student':
+              return res.redirect('/register-student');
+            case 'mentor':
+              return res.redirect('/register-mentor');
+            case 'admin':
+              return res.redirect('/admin/dashboard');
+            default:
+              return res.redirect('/dashboard');
+          }
         }
+      } catch (error) {
+        console.error("Callback redirect error:", error);
       }
       
       // Default redirect to dashboard
