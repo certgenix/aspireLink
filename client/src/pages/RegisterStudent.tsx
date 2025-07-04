@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,7 @@ import { X, CheckCircle, Users, Clock, Target } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
+import { useAuth } from "@/hooks/useAuth";
 import { Link } from "wouter";
 
 interface StudentData {
@@ -71,6 +72,18 @@ export default function RegisterStudent() {
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user, isLoading } = useAuth();
+
+  // Pre-populate form with authenticated user data
+  useEffect(() => {
+    if (user && !isLoading) {
+      setStudentData(prev => ({
+        ...prev,
+        fullName: `${user.firstName || ''} ${user.lastName || ''}`.trim(),
+        emailAddress: user.email || ''
+      }));
+    }
+  }, [user, isLoading]);
 
   const registrationMutation = useMutation({
     mutationFn: async (data: any) => {
