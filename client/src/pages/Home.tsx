@@ -38,12 +38,12 @@ export default function Home() {
                   with experienced professionals through 4-month academic cohorts.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
-                  <a href="/register-student">
+                  <a href="/api/login?role=student">
                     <Button className="bg-primary-custom hover:bg-primary-dark text-white px-8 py-4 rounded-lg font-semibold text-lg shadow-lg">
                       Apply as Student
                     </Button>
                   </a>
-                  <a href="/register-mentor">
+                  <a href="/api/login?role=mentor">
                     <Button
                       variant="outline"
                       className="border-2 px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200"

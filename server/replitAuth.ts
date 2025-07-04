@@ -65,24 +65,28 @@ async function upsertUser(
 ) {
   const existingUser = await storage.getUser(claims["sub"]);
   
-  // Check for email conflicts - same email with different user ID (different accounts)
+  // Check for email conflicts - same email with different user ID (different accounts) 
   const userWithEmail = await storage.getUserByEmail(claims["email"]);
   if (userWithEmail && userWithEmail.id !== claims["sub"]) {
     console.log("Email conflict detected - email already used by different user:", userWithEmail.id);
     throw new Error("Email address is already registered with a different account");
   }
   
-  // If user already exists, keep their existing role (no role switching)
+  // Determine role: existing users keep their role, new users use intent role or default to student
   let role: UserRole = "student";
   if (existingUser?.role) {
+    // Existing user - keep their current role (no role switching)
     role = existingUser.role;
     console.log("Existing user found - keeping role:", role);
-  } else if (intentRole) {
-    // Only allow role intent for new users
-    role = intentRole;
-    console.log("New user - setting role from intent:", role);
+  } else {
+    // New user - use intent role if provided, otherwise default to student
+    if (intentRole) {
+      role = intentRole;
+      console.log("New user - setting role from intent:", role);
+    } else {
+      console.log("New user - defaulting to student role");
+    }
   }
-  // Otherwise, default to student for new users
 
   await storage.upsertUser({
     id: claims["sub"],

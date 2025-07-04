@@ -72,7 +72,22 @@ export default function RegisterStudent() {
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, isAuthenticated } = useAuth();
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      toast({
+        title: "Authentication Required",
+        description: "Please log in to access the registration form.",
+        variant: "destructive",
+      });
+      setTimeout(() => {
+        window.location.href = "/api/login?role=student";
+      }, 1000);
+      return;
+    }
+  }, [isAuthenticated, isLoading, toast]);
 
   // Pre-populate form with authenticated user data
   useEffect(() => {
