@@ -161,6 +161,7 @@ export default function RegisterMentor() {
   const handleSkipAutoFill = () => {
     setLinkedinData({
       fullName: "",
+      emailAddress: "",
       currentJobTitle: "",
       company: "",
       yearsExperience: 0,
@@ -277,19 +278,30 @@ export default function RegisterMentor() {
             <CardContent className="p-12">
               <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-6" />
               <h1 className="text-3xl font-bold text-charcoal-custom mb-4">
-                Registration Successful!
+                Welcome to AspireLink, {linkedinData?.fullName.split(' ')[0]}!
               </h1>
               <p className="text-lg text-gray-600 mb-8">
-                Thank you for registering as an AspireLink mentor. We'll review your application 
-                and contact you within 3-5 business days with next steps.
+                Thank you for joining our mentorship program as a mentor. Your application has been successfully submitted and we're excited to have you help shape the next generation of professionals. We'll review your application and contact you within 3-5 business days with next steps.
               </p>
               <div className="bg-blue-50 p-6 rounded-lg mb-8">
-                <h3 className="font-semibold text-charcoal-custom mb-2">What happens next?</h3>
-                <ul className="text-left text-gray-600 space-y-2">
-                  <li>• Application review by our team</li>
-                  <li>• Brief screening interview (15-20 minutes)</li>
-                  <li>• Mentor orientation and training</li>
-                  <li>• Student matching based on your preferences</li>
+                <h3 className="font-semibold text-charcoal-custom mb-3">Your mentoring journey begins now!</h3>
+                <ul className="text-left text-gray-600 space-y-3">
+                  <li className="flex items-start">
+                    <span className="font-medium text-blue-600 mr-2">1.</span>
+                    <span><strong>Application Review:</strong> Our team will carefully review your background and mentoring preferences</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="font-medium text-blue-600 mr-2">2.</span>
+                    <span><strong>Brief Interview:</strong> A friendly 15-20 minute conversation to discuss your mentoring goals and availability</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="font-medium text-blue-600 mr-2">3.</span>
+                    <span><strong>Mentor Orientation:</strong> Essential training session covering program structure, communication best practices, and support resources</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="font-medium text-blue-600 mr-2">4.</span>
+                    <span><strong>Student Matching:</strong> We'll pair you with a student whose goals align with your expertise and availability</span>
+                  </li>
                 </ul>
               </div>
               <Button 
