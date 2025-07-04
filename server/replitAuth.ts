@@ -154,8 +154,11 @@ export async function setupAuth(app: Express) {
   app.get("/api/login", (req, res, next) => {
     // Store role intent in session for post-login redirect
     const roleIntent = req.query.role as string;
+    console.log("Login request - role parameter:", roleIntent);
+    
     if (roleIntent && ['student', 'mentor', 'admin', 'program_director'].includes(roleIntent)) {
       req.session.roleIntent = roleIntent as UserRole;
+      console.log("Login request - stored role intent:", req.session.roleIntent);
     }
     
     passport.authenticate(`replitauth:${req.hostname}`, {
