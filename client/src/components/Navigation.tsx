@@ -9,6 +9,7 @@ import { useAuth } from "@/hooks/useAuth";
 export default function Navigation() {
   const [location] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const { user, isAuthenticated } = useAuth();
 
   const navItems = [
     { href: "/", label: "Home" },
@@ -56,13 +57,30 @@ export default function Navigation() {
                 </Link>
               ))}
               
-              {/* Login Button */}
-              <a 
-                href="/api/login"
-                className="bg-primary-custom hover:bg-primary-dark text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors duration-200"
-              >
-                Login
-              </a>
+              {/* Authentication Buttons */}
+              {isAuthenticated ? (
+                <div className="flex items-center space-x-4">
+                  <Link 
+                    href="/dashboard"
+                    className="font-medium text-charcoal-custom hover:text-primary-custom transition-colors duration-200"
+                  >
+                    Dashboard
+                  </Link>
+                  <a 
+                    href="/api/logout"
+                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors duration-200"
+                  >
+                    Logout
+                  </a>
+                </div>
+              ) : (
+                <a 
+                  href="/api/login"
+                  className="bg-primary-custom hover:bg-primary-dark text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors duration-200"
+                >
+                  Login
+                </a>
+              )}
             </div>
           </div>
 
@@ -93,14 +111,33 @@ export default function Navigation() {
                     </Link>
                   ))}
                   
-                  {/* Mobile Login Button */}
-                  <a 
-                    href="/api/login"
-                    onClick={() => setIsOpen(false)}
-                    className="block bg-primary-custom hover:bg-primary-dark text-white px-4 py-3 rounded-lg font-medium text-base transition-colors duration-200 text-center mt-4"
-                  >
-                    Login
-                  </a>
+                  {/* Mobile Authentication Buttons */}
+                  {isAuthenticated ? (
+                    <div className="mt-4 space-y-3">
+                      <Link 
+                        href="/dashboard"
+                        onClick={() => setIsOpen(false)}
+                        className="block px-3 py-2 text-base font-medium text-charcoal-custom hover:text-primary-custom transition-colors duration-200"
+                      >
+                        Dashboard
+                      </Link>
+                      <a 
+                        href="/api/logout"
+                        onClick={() => setIsOpen(false)}
+                        className="block bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-medium text-base transition-colors duration-200 text-center"
+                      >
+                        Logout
+                      </a>
+                    </div>
+                  ) : (
+                    <a 
+                      href="/api/login"
+                      onClick={() => setIsOpen(false)}
+                      className="block bg-primary-custom hover:bg-primary-dark text-white px-4 py-3 rounded-lg font-medium text-base transition-colors duration-200 text-center mt-4"
+                    >
+                      Login
+                    </a>
+                  )}
                 </div>
               </SheetContent>
             </Sheet>
