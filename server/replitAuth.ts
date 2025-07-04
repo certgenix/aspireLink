@@ -23,6 +23,9 @@ const getOidcConfig = memoize(
   { maxAge: 3600 * 1000 }
 );
 
+// Temporary storage for role intents during authentication
+const roleIntentCache = new Map<string, UserRole>();
+
 export function getSession() {
   const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
   const pgStore = connectPg(session);
@@ -99,12 +102,22 @@ export async function setupAuth(app: Express) {
       const user = {};
       updateUserSession(user, tokens);
       
-      // Check if there's a role intent in the session
-      const intentRole = req?.session?.roleIntent as UserRole;
+      // Try to get role intent from cache using state parameter
+      const stateParam = req?.query?.state || req?.body?.state;
+      let intentRole = roleIntentCache.get(stateParam);
+      
+      if (intentRole) {
+        console.log("Authentication verify - Role intent from cache:", intentRole);
+        // Clean up the cache entry
+        roleIntentCache.delete(stateParam);
+      } else {
+        // Fallback to session if available
+        intentRole = req?.session?.roleIntent as UserRole;
+        console.log("Authentication verify - Role intent from session:", intentRole);
+      }
       
       console.log("Authentication verify - User claims:", tokens.claims());
-      console.log("Authentication verify - Role intent:", intentRole);
-      console.log("Authentication verify - Full session:", req?.session);
+      console.log("Authentication verify - Final role intent:", intentRole);
       
       await upsertUser(tokens.claims(), intentRole);
       
@@ -158,13 +171,23 @@ export async function setupAuth(app: Express) {
     if (roleIntent && ['student', 'mentor', 'admin', 'program_director'].includes(roleIntent)) {
       req.session.roleIntent = roleIntent as UserRole;
       console.log("Login request - stored role intent:", req.session.roleIntent);
+      
+      // Generate a unique state parameter and store role intent in cache
+      const stateParam = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      roleIntentCache.set(stateParam, roleIntent as UserRole);
+      console.log("Login request - stored role intent in cache:", stateParam, roleIntent);
+      
+      passport.authenticate(`replitauth:${req.hostname}`, {
+        prompt: "login consent",
+        scope: ["openid", "email", "profile", "offline_access"],
+        state: stateParam,
+      })(req, res, next);
+    } else {
+      passport.authenticate(`replitauth:${req.hostname}`, {
+        prompt: "login consent",
+        scope: ["openid", "email", "profile", "offline_access"],
+      })(req, res, next);
     }
-    
-    passport.authenticate(`replitauth:${req.hostname}`, {
-      prompt: "login consent",
-      scope: ["openid", "email", "profile", "offline_access"],
-      state: roleIntent || '', // Pass role intent as state parameter
-    })(req, res, next);
   });
 
   app.get("/api/callback", (req, res, next) => {
@@ -193,6 +216,11 @@ export async function setupAuth(app: Express) {
           if (roleIntent) {
             delete req.session.roleIntent;
             console.log("Callback redirect - Cleared role intent from session");
+          }
+          
+          // Also check if user's role was updated during authentication
+          if (roleIntent && dbUser?.role !== roleIntent) {
+            console.log("Callback redirect - Role was switched from", dbUser?.role, "to", roleIntent);
           }
           
           // If there's a role intent, redirect to registration
