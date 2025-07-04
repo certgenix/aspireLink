@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm";
 export interface IStorage {
   // User operations (Replit Auth)
   getUser(id: string): Promise<User | undefined>;
+  getUserByEmail(email: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
   updateUserRole(id: string, role: UserRole): Promise<User>;
   createContact(contact: InsertContact): Promise<Contact>;
@@ -50,6 +51,15 @@ export class MemStorage implements IStorage {
 
   async getUser(id: string): Promise<User | undefined> {
     return this.users.get(id);
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    for (const user of this.users.values()) {
+      if (user.email === email) {
+        return user;
+      }
+    }
+    return undefined;
   }
 
   async upsertUser(userData: UpsertUser): Promise<User> {
@@ -201,8 +211,8 @@ export class MemStorage implements IStorage {
       return {
         id: 1,
         email: "program.admin@aspirelink.org",
-        passwordHash: "@sp1reLink",
-        isActive: true,
+        password: "@sp1reLink",
+        
         createdAt: new Date()
       };
     }
@@ -224,7 +234,7 @@ export class MemStorage implements IStorage {
     const newAssignment: MentorStudentAssignment = {
       ...assignment,
       id,
-      isActive: true,
+      
       assignedAt: new Date()
     };
     return newAssignment;
@@ -250,6 +260,11 @@ export class MemStorage implements IStorage {
 export class DatabaseStorage implements IStorage {
   async getUser(id: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || undefined;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
     return user || undefined;
   }
 
@@ -357,8 +372,8 @@ export class DatabaseStorage implements IStorage {
       return {
         id: 1,
         email: "program.admin@aspirelink.org",
-        passwordHash: "@sp1reLink",
-        isActive: true,
+        password: "@sp1reLink",
+        
         createdAt: new Date()
       };
     }
