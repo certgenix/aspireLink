@@ -79,7 +79,7 @@ export default function RegisterStudent() {
     console.log("RegisterStudent - User data:", user);
     console.log("RegisterStudent - IsLoading:", isLoading);
     
-    if (user && !isLoading) {
+    if (user) {
       const fullName = `${user.firstName || ''} ${user.lastName || ''}`.trim();
       const emailAddress = user.email || '';
       
@@ -92,7 +92,7 @@ export default function RegisterStudent() {
         emailAddress
       }));
     }
-  }, [user, isLoading]);
+  }, [user]);
 
   const registrationMutation = useMutation({
     mutationFn: async (data: any) => {

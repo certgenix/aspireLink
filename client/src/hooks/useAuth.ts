@@ -6,11 +6,10 @@ export function useAuth() {
     retry: false,
   });
 
-  // For now, simulate unauthenticated state since API routes have issues
   return {
-    user: null,
-    isLoading: false,
-    isAuthenticated: false,
+    user,
+    isLoading,
+    isAuthenticated: !!user,
     error
   };
 }
