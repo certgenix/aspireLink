@@ -27,11 +27,13 @@ export default function Home() {
   const { toast } = useToast();
 
   const handleStudentRegistration = async () => {
+    console.log('Student registration clicked', { isLoading, isAuthenticated, user });
     if (isLoading) return;
     
     if (!isAuthenticated) {
       // Store intended role in session storage for post-login redirect
       sessionStorage.setItem('pendingRole', 'student');
+      console.log('Redirecting to login...');
       window.location.href = '/api/login';
       return;
     }
@@ -86,11 +88,13 @@ export default function Home() {
   };
 
   const handleMentorRegistration = async () => {
+    console.log('Mentor registration clicked', { isLoading, isAuthenticated, user });
     if (isLoading) return;
     
     if (!isAuthenticated) {
       // Store intended role in session storage for post-login redirect
       sessionStorage.setItem('pendingRole', 'mentor');
+      console.log('Redirecting to login...');
       window.location.href = '/api/login';
       return;
     }

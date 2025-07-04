@@ -73,7 +73,10 @@ export default function Navigation() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => window.location.href = '/api/logout'}
+                          onClick={() => {
+                            console.log('Logout clicked');
+                            window.location.href = '/api/logout';
+                          }}
                         >
                           Logout
                         </Button>
@@ -82,7 +85,10 @@ export default function Navigation() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => window.location.href = '/api/login'}
+                        onClick={() => {
+                          console.log('Login clicked');
+                          window.location.href = '/api/login';
+                        }}
                       >
                         Login
                       </Button>
