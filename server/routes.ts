@@ -36,6 +36,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Failed to fetch user" });
     }
   });
+
+  // Role switching endpoint
+  app.post('/api/auth/switch-role', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { role } = req.body;
+      
+      // Validate role
+      if (!role || !['student', 'mentor', 'admin', 'program_director'].includes(role)) {
+        return res.status(400).json({ message: "Invalid role" });
+      }
+      
+      console.log("Role switch request - User ID:", userId, "New role:", role);
+      
+      // Update user role in database
+      const updatedUser = await storage.updateUserRole(userId, role);
+      
+      console.log("Role switch success - Updated user:", updatedUser);
+      res.json({ success: true, user: updatedUser });
+    } catch (error) {
+      console.error("Error switching role:", error);
+      res.status(500).json({ message: "Failed to switch role" });
+    }
+  });
+
   // Contact form submission endpoint
   app.post("/api/contact", async (req, res) => {
     try {

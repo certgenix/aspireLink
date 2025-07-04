@@ -23,8 +23,9 @@ const getOidcConfig = memoize(
   { maxAge: 3600 * 1000 }
 );
 
-// Temporary storage for role intents during authentication
+// Temporary storage for role intents during authentication - using multiple keys for reliability
 const roleIntentCache = new Map<string, UserRole>();
+const emailRoleIntentCache = new Map<string, UserRole>();
 
 export function getSession() {
   const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
@@ -102,21 +103,47 @@ export async function setupAuth(app: Express) {
       const user = {};
       updateUserSession(user, tokens);
       
-      // Try to get role intent from cache using state parameter
-      const stateParam = req?.query?.state || req?.body?.state;
-      let intentRole = roleIntentCache.get(stateParam);
+      console.log("Authentication verify - User claims:", tokens.claims());
       
-      if (intentRole) {
-        console.log("Authentication verify - Role intent from cache:", intentRole);
-        // Clean up the cache entry
-        roleIntentCache.delete(stateParam);
-      } else {
-        // Fallback to session if available
-        intentRole = req?.session?.roleIntent as UserRole;
-        console.log("Authentication verify - Role intent from session:", intentRole);
+      // Try to get role intent from session first
+      let intentRole: UserRole | undefined = req?.session?.roleIntent as UserRole;
+      console.log("Authentication verify - Role intent from session:", intentRole);
+      
+      // If not in session, try cache with session ID
+      if (!intentRole) {
+        const sessionId = req?.session?.id || req?.sessionID;
+        if (sessionId) {
+          const cachedRole = roleIntentCache.get(sessionId);
+          if (cachedRole) {
+            intentRole = cachedRole;
+            console.log("Authentication verify - Role intent from cache (session ID):", intentRole);
+            // Clean up the cache entry
+            roleIntentCache.delete(sessionId);
+          }
+        }
       }
       
-      console.log("Authentication verify - User claims:", tokens.claims());
+      // If still no role intent, try email-based cache (most reliable)
+      if (!intentRole) {
+        const claims = tokens.claims();
+        const userEmail = claims?.email;
+        if (userEmail && typeof userEmail === 'string') {
+          const cachedRole = emailRoleIntentCache.get(userEmail);
+          if (cachedRole) {
+            intentRole = cachedRole;
+            console.log("Authentication verify - Role intent from email cache:", intentRole);
+            // Clean up the email cache entry
+            emailRoleIntentCache.delete(userEmail);
+          }
+        }
+      }
+      
+      // If still no role intent, check all cache entries for debugging
+      if (!intentRole) {
+        console.log("Authentication verify - Session cache entries:", Array.from(roleIntentCache.entries()));
+        console.log("Authentication verify - Email cache entries:", Array.from(emailRoleIntentCache.entries()));
+      }
+      
       console.log("Authentication verify - Final role intent:", intentRole);
       
       await upsertUser(tokens.claims(), intentRole);
@@ -163,31 +190,51 @@ export async function setupAuth(app: Express) {
     })(req, res, next);
   });
 
-  app.get("/api/login", (req, res, next) => {
+  app.get("/api/login", async (req, res, next) => {
     // Store role intent in session for post-login redirect
     const roleIntent = req.query.role as string;
     console.log("Login request - role parameter:", roleIntent);
     
     if (roleIntent && ['student', 'mentor', 'admin', 'program_director'].includes(roleIntent)) {
       req.session.roleIntent = roleIntent as UserRole;
-      console.log("Login request - stored role intent:", req.session.roleIntent);
+      console.log("Login request - stored role intent in session:", req.session.roleIntent);
       
-      // Generate a unique state parameter and store role intent in cache
-      const stateParam = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      roleIntentCache.set(stateParam, roleIntent as UserRole);
-      console.log("Login request - stored role intent in cache:", stateParam, roleIntent);
+      // Store role intent in cache with session ID as key
+      const sessionId = req.session.id || req.sessionID;
+      if (sessionId) {
+        roleIntentCache.set(sessionId, roleIntent as UserRole);
+        console.log("Login request - stored role intent in cache with session ID:", sessionId, roleIntent);
+      }
       
-      passport.authenticate(`replitauth:${req.hostname}`, {
-        prompt: "login consent",
-        scope: ["openid", "email", "profile", "offline_access"],
-        state: stateParam,
-      })(req, res, next);
-    } else {
-      passport.authenticate(`replitauth:${req.hostname}`, {
-        prompt: "login consent",
-        scope: ["openid", "email", "profile", "offline_access"],
-      })(req, res, next);
+      // Also store role intent based on email if user is already authenticated
+      if (req.isAuthenticated() && req.user) {
+        const userClaims = (req.user as any)?.claims;
+        const userEmail = userClaims?.email;
+        if (userEmail && typeof userEmail === 'string') {
+          emailRoleIntentCache.set(userEmail, roleIntent as UserRole);
+          console.log("Login request - stored role intent in email cache:", userEmail, roleIntent);
+          
+          // Set a timeout to clean up the email cache entry after 10 minutes
+          setTimeout(() => {
+            emailRoleIntentCache.delete(userEmail);
+            console.log("Login request - cleaned up email cached role intent for:", userEmail);
+          }, 10 * 60 * 1000);
+        }
+      }
+      
+      // Set a timeout to clean up the session cache entry after 5 minutes
+      if (sessionId) {
+        setTimeout(() => {
+          roleIntentCache.delete(sessionId);
+          console.log("Login request - cleaned up session cached role intent for:", sessionId);
+        }, 5 * 60 * 1000);
+      }
     }
+    
+    passport.authenticate(`replitauth:${req.hostname}`, {
+      prompt: "login consent",
+      scope: ["openid", "email", "profile", "offline_access"],
+    })(req, res, next);
   });
 
   app.get("/api/callback", (req, res, next) => {

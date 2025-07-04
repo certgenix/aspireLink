@@ -2,11 +2,46 @@ import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useQuery } from "@tanstack/react-query";
-import { CheckCircle, Calendar, Users, Star } from "lucide-react";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { queryClient } from "@/lib/queryClient";
+import { CheckCircle, Calendar, Users, Star, RefreshCw } from "lucide-react";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Dashboard() {
   const { user, isLoading } = useAuth();
+  const { toast } = useToast();
+
+  // Role switching mutation
+  const roleSwitchMutation = useMutation({
+    mutationFn: async (newRole: string) => {
+      return await apiRequest("/api/auth/switch-role", "POST", { role: newRole });
+    },
+    onSuccess: () => {
+      // Invalidate auth user query to refresh user data
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      toast({
+        title: "Role switched successfully",
+        description: "Your role has been updated. The page will refresh shortly.",
+      });
+      // Refresh the page after a short delay to show new role content
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    },
+    onError: (error) => {
+      toast({
+        title: "Role switch failed",
+        description: "Failed to switch role. Please try again.",
+        variant: "destructive",
+      });
+      console.error("Role switch error:", error);
+    },
+  });
+
+  const handleRoleSwitch = (newRole: string) => {
+    roleSwitchMutation.mutate(newRole);
+  };
 
   // Check if student has completed registration
   const { data: studentRegistrations, isLoading: isLoadingRegistrations } = useQuery({
@@ -190,9 +225,43 @@ export default function Dashboard() {
     }
   };
 
+  const RoleSwitcher = () => (
+    <Card className="mb-6">
+      <CardContent className="p-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="font-semibold">Current Role: {user?.role}</h3>
+            <p className="text-sm text-gray-600">Switch between student and mentor roles</p>
+          </div>
+          <div className="flex gap-2">
+            {user?.role !== 'student' && (
+              <Button
+                variant="outline"
+                onClick={() => handleRoleSwitch('student')}
+                disabled={roleSwitchMutation.isPending}
+              >
+                {roleSwitchMutation.isPending ? <RefreshCw className="animate-spin w-4 h-4" /> : 'Switch to Student'}
+              </Button>
+            )}
+            {user?.role !== 'mentor' && (
+              <Button
+                variant="outline"
+                onClick={() => handleRoleSwitch('mentor')}
+                disabled={roleSwitchMutation.isPending}
+              >
+                {roleSwitchMutation.isPending ? <RefreshCw className="animate-spin w-4 h-4" /> : 'Switch to Mentor'}
+              </Button>
+            )}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <RoleSwitcher />
         {getDashboardContent()}
       </div>
     </div>
