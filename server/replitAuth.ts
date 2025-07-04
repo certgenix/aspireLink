@@ -190,14 +190,22 @@ export async function setupAuth(app: Express) {
             console.log("Callback redirect - Role intent:", roleIntent);
           }
           
-          // Redirect based on role intent (for registration) or user role (for existing users)
-          const targetRole = roleIntent || userRole;
+          // If there's a role intent, redirect to registration
+          if (roleIntent) {
+            switch (roleIntent) {
+              case 'student':
+                return res.redirect('/register-student');
+              case 'mentor':
+                return res.redirect('/register-mentor');
+              case 'admin':
+                return res.redirect('/admin/dashboard');
+              default:
+                return res.redirect('/dashboard');
+            }
+          }
           
-          switch (targetRole) {
-            case 'student':
-              return res.redirect('/register-student');
-            case 'mentor':
-              return res.redirect('/register-mentor');
+          // For existing users without role intent, redirect to dashboard
+          switch (userRole) {
             case 'admin':
               return res.redirect('/admin/dashboard');
             default:
