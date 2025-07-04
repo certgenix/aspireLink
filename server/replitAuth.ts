@@ -217,38 +217,23 @@ export async function setupAuth(app: Express) {
   });
 
   app.get("/api/login", async (req, res, next) => {
-    // Store role intent in session for post-login redirect
+    // Handle role intent with URL state parameter
     const roleIntent = req.query.role as string;
     console.log("Login request - role parameter:", roleIntent);
     
-    if (roleIntent && ['student', 'mentor', 'admin', 'program_director'].includes(roleIntent)) {
-      req.session.roleIntent = roleIntent as UserRole;
-      console.log("Login request - stored role intent in session:", req.session.roleIntent);
-      
-      // Store role intent in cache with session ID as key
-      const sessionId = req.session.id || req.sessionID;
-      if (sessionId) {
-        roleIntentCache.set(sessionId, roleIntent as UserRole);
-        console.log("Login request - stored role intent in cache with session ID:", sessionId, roleIntent);
-      }
-      
-      // Store role intent in session with a different key for immediate access
-      (req.session as any).immediateRoleIntent = roleIntent as UserRole;
-      console.log("Login request - stored immediate role intent:", roleIntent);
-      
-      // Set a timeout to clean up the session cache entry after 5 minutes
-      if (sessionId) {
-        setTimeout(() => {
-          roleIntentCache.delete(sessionId);
-          console.log("Login request - cleaned up session cached role intent for:", sessionId);
-        }, 5 * 60 * 1000);
-      }
-    }
-    
-    passport.authenticate(`replitauth:${req.hostname}`, {
+    // Use state parameter to preserve role intent through OAuth flow
+    const authOptions: any = {
       prompt: "login consent",
       scope: ["openid", "email", "profile", "offline_access"],
-    })(req, res, next);
+    };
+    
+    if (roleIntent && ['student', 'mentor', 'admin', 'program_director'].includes(roleIntent)) {
+      // Pass role intent as state parameter in OAuth flow
+      authOptions.state = `role=${roleIntent}`;
+      console.log("Login request - adding role to OAuth state:", roleIntent);
+    }
+    
+    passport.authenticate(`replitauth:${req.hostname}`, authOptions)(req, res, next);
   });
 
   app.get("/api/callback", (req, res, next) => {
@@ -261,31 +246,43 @@ export async function setupAuth(app: Express) {
       }
       
       try {
-        // Get user's role from database and redirect accordingly
+        // Extract role intent from OAuth state parameter
+        const state = req.query.state as string;
+        let roleIntent: UserRole | undefined;
+        
+        if (state && state.startsWith('role=')) {
+          roleIntent = state.split('role=')[1] as UserRole;
+          console.log("Callback redirect - Role intent from OAuth state:", roleIntent);
+        }
+        
+        // Get user's role from database
         const user = req.user as any;
         const userId = user?.claims?.sub;
         
         if (userId) {
-          const dbUser = await storage.getUser(userId);
+          let dbUser = await storage.getUser(userId);
+          
+          // If we have a role intent and this is a new user (no existing role), assign the intended role
+          if (roleIntent && (!dbUser || !dbUser.role)) {
+            console.log("Callback redirect - Assigning role for new user:", roleIntent);
+            await storage.upsertUser({
+              id: userId,
+              email: user.claims.email,
+              firstName: user.claims.first_name,
+              lastName: user.claims.last_name,
+              profileImageUrl: user.claims.profile_image_url,
+              role: roleIntent,
+            });
+            // Refresh user data
+            dbUser = await storage.getUser(userId);
+          }
+          
           const userRole = dbUser?.role;
+          console.log("Callback redirect - Final user role:", userRole);
+          console.log("Callback redirect - Role intent:", roleIntent);
           
-          console.log("Callback redirect - User role:", userRole);
-          
-          // Check if there was a role intent for registration/role switching
-          const roleIntent = req.session.roleIntent;
-          console.log("Callback redirect - Role intent from session:", roleIntent);
-          if (roleIntent) {
-            delete req.session.roleIntent;
-            console.log("Callback redirect - Cleared role intent from session");
-          }
-          
-          // Also check if user's role was updated during authentication
-          if (roleIntent && dbUser?.role !== roleIntent) {
-            console.log("Callback redirect - Role was switched from", dbUser?.role, "to", roleIntent);
-          }
-          
-          // If there's a role intent, redirect to registration
-          if (roleIntent) {
+          // If there's a role intent, redirect to the appropriate registration form
+          if (roleIntent && ['student', 'mentor'].includes(roleIntent)) {
             switch (roleIntent) {
               case 'student':
                 return res.redirect('/register-student');
