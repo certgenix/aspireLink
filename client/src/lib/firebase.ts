@@ -24,9 +24,12 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const googleProvider = new GoogleAuthProvider();
 
-// Configure Google provider
+// Configure Google provider with proper settings
 googleProvider.addScope('email');
 googleProvider.addScope('profile');
+googleProvider.setCustomParameters({
+  prompt: 'select_account'
+});
 
 // User roles
 export type UserRole = 'admin' | 'student' | 'mentor' | 'pd';
