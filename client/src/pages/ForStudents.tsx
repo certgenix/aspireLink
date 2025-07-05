@@ -18,7 +18,7 @@ export default function ForStudents() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="py-24" style={{background: 'linear-gradient(135deg, #2E86AB 0%, #1e5b7a 100%)'}}>
+      <section className="py-24" style={{background: 'linear-gradient(135deg, #6fa8c4 0%, #5a8aa3 100%)'}}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="font-inter font-bold text-4xl md:text-5xl mb-6" style={{color: '#ffffff'}}>
             For Students
@@ -34,7 +34,7 @@ export default function ForStudents() {
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-3 gap-8 mb-16">
-            <Card className="shadow-xl" style={{background: 'linear-gradient(135deg, #2E86AB 0%, #1e5b7a 100%)'}}>
+            <Card className="shadow-xl" style={{background: 'linear-gradient(135deg, #6fa8c4 0%, #5a8aa3 100%)'}}>
               <CardContent className="p-8">
                 <GraduationCap className="w-12 h-12 mb-6" style={{color: '#ffffff'}} />
                 <h3 className="font-inter font-semibold text-2xl mb-4" style={{color: '#ffffff'}}>
@@ -61,7 +61,7 @@ export default function ForStudents() {
               </CardContent>
             </Card>
 
-            <Card className="shadow-xl" style={{background: 'linear-gradient(135deg, #A23B72 0%, #7d2d5a 100%)'}}>
+            <Card className="shadow-xl" style={{background: 'linear-gradient(135deg, #b895a8 0%, #9c7a8c 100%)'}}>
               <CardContent className="p-8">
                 <Rocket className="w-12 h-12 mb-6" style={{color: '#ffffff'}} />
                 <h3 className="font-inter font-semibold text-2xl mb-4" style={{color: '#ffffff'}}>
@@ -88,7 +88,7 @@ export default function ForStudents() {
               </CardContent>
             </Card>
 
-            <Card className="shadow-xl" style={{background: 'linear-gradient(135deg, #F18F01 0%, #c47301 100%)'}}>
+            <Card className="shadow-xl" style={{background: 'linear-gradient(135deg, #d4a574 0%, #b8925f 100%)'}}>
               <CardContent className="p-8">
                 <Calendar className="w-12 h-12 mb-6" style={{color: '#ffffff'}} />
                 <h3 className="font-inter font-semibold text-2xl mb-4" style={{color: '#ffffff'}}>

@@ -7,7 +7,7 @@ export default function ForMentors() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="py-24" style={{background: 'linear-gradient(135deg, #A23B72 0%, #7d2d5a 100%)'}}>
+      <section className="py-24" style={{background: 'linear-gradient(135deg, #b895a8 0%, #9c7a8c 100%)'}}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="font-inter font-bold text-4xl md:text-5xl mb-6" style={{color: '#ffffff'}}>
             For Mentors
@@ -264,7 +264,7 @@ export default function ForMentors() {
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = '#ffffff';
-                  e.currentTarget.style.color = '#A23B72';
+                  e.currentTarget.style.color = '#b895a8';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = 'transparent';

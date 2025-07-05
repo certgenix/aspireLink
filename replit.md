@@ -161,6 +161,7 @@ Changelog:
 - July 5, 2025. Updated circular icons to use proper Lucide React icons instead of numbers: Home page process steps (FileText, UserCheck, Calendar, Award), features section (Target, TrendingUp, Network), About page vision (Globe, Heart, Rocket), and Contact page "Other Ways to Connect" section (Clock, MapPin, Calendar) - all with solid colored backgrounds and white icons matching For Students page style
 - July 5, 2025. Streamlined Contact page by removing duplicate "Contact Information" and "Other Ways to Connect" sections, keeping only the comprehensive "How to Reach Us" section with email and LinkedIn contact details to eliminate redundancy
 - July 5, 2025. Updated Privacy Policy page: removed outdated "Last Updated: December 30, 2024" date and enhanced Data Security section to specify that user data is stored in encrypted storage facilities located in the United States for security and compliance
+- July 5, 2025. Updated hero sections and gradient panels to use lighter, more professional colors: About page now uses muted blue-gray gradient (#8b9dc3 to #6b7a9b), For Students page uses softer teal (#6fa8c4 to #5a8aa3), For Mentors page uses muted rose (#b895a8 to #9c7a8c), and all colored panels on For Students page (Eligibility, Benefits, Timeline) updated to match the softer color scheme for better professional appearance
 
 ## User Preferences
 
