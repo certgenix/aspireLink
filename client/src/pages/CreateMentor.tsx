@@ -10,7 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
-import { ArrowLeft, Building, User, Clock } from "lucide-react";
+import { ArrowLeft, Building, User, Clock, Loader2 } from "lucide-react";
 
 const disciplines = [
   "Computer Science", "Engineering", "Business", "Marketing", "Design", 
@@ -120,45 +120,48 @@ export default function CreateMentor() {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-8">
           {/* Professional Information */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
+          <Card className="shadow-sm border-gray-200">
+            <CardHeader className="bg-gray-50 border-b border-gray-200">
+              <CardTitle className="flex items-center space-x-2 text-lg">
                 <User className="w-5 h-5 text-secondary-custom" />
                 <span>Professional Information</span>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="p-6 space-y-6">
               <div>
-                <Label htmlFor="linkedinUrl">LinkedIn URL (Optional)</Label>
+                <Label htmlFor="linkedinUrl" className="text-sm font-medium text-gray-700">LinkedIn URL (Optional)</Label>
                 <Input
                   id="linkedinUrl"
                   type="url"
                   value={formData.linkedinUrl}
                   onChange={(e) => setFormData({...formData, linkedinUrl: e.target.value})}
                   placeholder="https://linkedin.com/in/yourprofile"
+                  className="mt-2 h-10"
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <Label htmlFor="fullName">Full Name *</Label>
+                  <Label htmlFor="fullName" className="text-sm font-medium text-gray-700">Full Name *</Label>
                   <Input
                     id="fullName"
                     value={formData.fullName}
                     onChange={(e) => setFormData({...formData, fullName: e.target.value})}
                     placeholder="Enter full name"
+                    className="mt-2 h-10"
                     required
                   />
                 </div>
                 <div>
-                  <Label htmlFor="currentJobTitle">Current Job Title</Label>
+                  <Label htmlFor="currentJobTitle" className="text-sm font-medium text-gray-700">Current Job Title</Label>
                   <Input
                     id="currentJobTitle"
                     value={formData.currentJobTitle}
                     onChange={(e) => setFormData({...formData, currentJobTitle: e.target.value})}
                     placeholder="e.g., Senior Software Engineer"
+                    className="mt-2 h-10"
                   />
                 </div>
               </div>
@@ -231,14 +234,14 @@ export default function CreateMentor() {
           </Card>
 
           {/* Mentorship Preferences */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
+          <Card className="shadow-sm border-gray-200">
+            <CardHeader className="bg-gray-50 border-b border-gray-200">
+              <CardTitle className="flex items-center space-x-2 text-lg">
                 <Building className="w-5 h-5 text-secondary-custom" />
                 <span>Mentorship Preferences</span>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="p-6 space-y-8">
               <div>
                 <Label>Preferred Student Disciplines</Label>
                 <p className="text-sm text-gray-500 mb-3">
@@ -317,60 +320,71 @@ export default function CreateMentor() {
           </Card>
 
           {/* Consent & Status */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Consent & Status</CardTitle>
+          <Card className="shadow-sm border-gray-200">
+            <CardHeader className="bg-gray-50 border-b border-gray-200">
+              <CardTitle className="flex items-center space-x-2 text-lg">
+                <User className="w-5 h-5 text-secondary-custom" />
+                <span>Consent & Status</span>
+              </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center space-x-2">
+            <CardContent className="p-6 space-y-6">
+              <div className="flex items-start space-x-3">
                 <Checkbox
                   id="agreedToCommitment"
                   checked={formData.agreedToCommitment}
                   onCheckedChange={(checked) => setFormData({...formData, agreedToCommitment: !!checked})}
                 />
-                <Label htmlFor="agreedToCommitment">
+                <Label htmlFor="agreedToCommitment" className="text-sm leading-relaxed">
                   Agrees to 4-month mentorship commitment
                 </Label>
               </div>
 
-              <div className="flex items-center space-x-2">
+              <div className="flex items-start space-x-3">
                 <Checkbox
                   id="consentToContact"
                   checked={formData.consentToContact}
                   onCheckedChange={(checked) => setFormData({...formData, consentToContact: !!checked})}
                 />
-                <Label htmlFor="consentToContact">
+                <Label htmlFor="consentToContact" className="text-sm leading-relaxed">
                   Consents to be contacted by AspireLink
                 </Label>
               </div>
 
-              <div className="flex items-center space-x-2">
+              <div className="flex items-start space-x-3">
                 <Checkbox
                   id="isActive"
                   checked={formData.isActive}
                   onCheckedChange={(checked) => setFormData({...formData, isActive: !!checked})}
                 />
-                <Label htmlFor="isActive">
+                <Label htmlFor="isActive" className="text-sm leading-relaxed">
                   Set as active mentor
                 </Label>
               </div>
             </CardContent>
           </Card>
 
-          <div className="flex justify-end space-x-4">
+          <div className="flex flex-col sm:flex-row justify-end gap-4 pt-6">
             <Button 
               type="button" 
               variant="outline" 
               onClick={() => setLocation("/admin/dashboard")}
+              className="px-6 py-2.5 border-gray-300"
             >
               Cancel
             </Button>
             <Button 
               type="submit" 
-              className="bg-secondary-custom hover:bg-secondary-dark"
+              className="px-6 py-2.5 bg-secondary-custom hover:bg-secondary-dark text-white"
               disabled={createMentorMutation.isPending}
             >
-              {createMentorMutation.isPending ? "Creating..." : "Create Mentor"}
+              {createMentorMutation.isPending ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                  Creating...
+                </>
+              ) : (
+                "Create Mentor"
+              )}
             </Button>
           </div>
         </form>

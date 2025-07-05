@@ -36,7 +36,7 @@ export default function CreateAssignment() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  
+
   const [selectedMentorId, setSelectedMentorId] = useState<string>("");
   const [selectedStudentId, setSelectedStudentId] = useState<string>("");
 
@@ -77,9 +77,9 @@ export default function CreateAssignment() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     console.log("Form submitted with:", { selectedMentorId, selectedStudentId });
-    
+
     if (!selectedMentorId || !selectedStudentId) {
       toast({
         title: "Missing Selection",
@@ -125,15 +125,15 @@ export default function CreateAssignment() {
   // Get match score for mentor-student pairing
   const getMatchScore = (mentor: Mentor, student: Student) => {
     if (!mentor || !student) return 0;
-    
+
     const disciplineMatches = mentor.preferredDisciplines?.filter(d => 
       student.preferredDisciplines?.includes(d)
     ).length || 0;
-    
+
     const topicMatches = mentor.mentoringTopics?.filter(t => 
       student.mentoringTopics?.includes(t)
     ).length || 0;
-    
+
     return disciplineMatches + topicMatches;
   };
 
@@ -157,23 +157,22 @@ export default function CreateAssignment() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Dashboard
           </Button>
-          
+
           <div className="flex items-center space-x-3 mb-6">
             <LinkIcon className="w-8 h-8 text-accent-custom" />
             <h1 className="text-3xl font-bold text-charcoal-custom">Create Assignment</h1>
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Assignment Selection */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <Card className="shadow-sm border-gray-200">
+            <CardHeader className="bg-gray-50 border-b border-gray-200">
+              <CardTitle className="flex items-center space-x-2 text-lg">
                 <Users className="w-5 h-5 text-accent-custom" />
-                <span>Mentor-Student Assignment</span>
+                <span>Assignment Details</span>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="p-6 space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Mentor Selection */}
                 <div>

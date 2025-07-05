@@ -146,3 +146,68 @@
 .hover\:bg-accent-dark:hover {
   background-color: #D67700;
 }
+
+/* Add any additional global styles here */
+
+/* Mobile-responsive form improvements */
+@media (max-width: 640px) {
+  .grid-cols-2 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+
+  .md\:grid-cols-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .space-x-4 > * + * {
+    margin-left: 0;
+    margin-top: 1rem;
+  }
+
+  .flex-col.sm\:flex-row {
+    flex-direction: column;
+  }
+
+  .justify-end {
+    justify-content: stretch;
+  }
+
+  .px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Touch-friendly interactive elements */
+@media (hover: none) and (pointer: coarse) {
+  .cursor-pointer {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  }
+
+  button, .cursor-pointer {
+    min-height: 44px;
+  }
+}
+
+/* Form input improvements */
+.form-input {
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Card styling improvements */
+.card-shadow {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+/* Progress indicator responsive design */
+@media (max-width: 480px) {
+  .progress-indicator {
+    transform: scale(0.8);
+  }
+}

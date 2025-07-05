@@ -7,7 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
-import { Lock, User } from "lucide-react";
+import { Lock, User, Loader2 } from "lucide-react";
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
@@ -55,25 +55,27 @@ export default function AdminLogin() {
     <div className="min-h-screen bg-light-custom flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <div className="mx-auto h-12 w-12 bg-primary-custom rounded-full flex items-center justify-center">
-            <Lock className="h-6 w-6 text-white" />
+          <div className="mx-auto h-16 w-16 bg-primary-custom rounded-full flex items-center justify-center shadow-lg">
+            <Lock className="h-8 w-8 text-white" />
           </div>
           <h2 className="mt-6 text-3xl font-extrabold text-charcoal-custom">
             Admin Login
           </h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-2 text-lg text-gray-600">
             AspireLink Mentorship Program Administration
           </p>
         </div>
         
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-center">Sign in to your account</CardTitle>
+        <Card className="shadow-xl border-0">
+          <CardHeader className="text-center pb-6">
+            <CardTitle className="text-xl font-semibold text-charcoal-custom">
+              Sign in to your account
+            </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-8 pb-8">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <Label htmlFor="email" className="flex items-center space-x-2">
+                <Label htmlFor="email" className="flex items-center space-x-2 text-sm font-medium text-gray-700">
                   <User className="w-4 h-4" />
                   <span>Email address</span>
                 </Label>
@@ -82,14 +84,14 @@ export default function AdminLogin() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@example.com"
-                  className="mt-2"
+                  placeholder="admin@aspirelink.org"
+                  className="mt-2 h-12"
                   required
                 />
               </div>
               
               <div>
-                <Label htmlFor="password" className="flex items-center space-x-2">
+                <Label htmlFor="password" className="flex items-center space-x-2 text-sm font-medium text-gray-700">
                   <Lock className="w-4 h-4" />
                   <span>Password</span>
                 </Label>
@@ -99,17 +101,24 @@ export default function AdminLogin() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
-                  className="mt-2"
+                  className="mt-2 h-12"
                   required
                 />
               </div>
 
               <Button
                 type="submit"
-                className="w-full bg-primary-custom hover:bg-primary-dark text-white"
+                className="w-full h-12 bg-primary-custom hover:bg-primary-dark text-white font-medium"
                 disabled={loginMutation.isPending}
               >
-                {loginMutation.isPending ? "Signing in..." : "Sign in"}
+                {loginMutation.isPending ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                    Signing in...
+                  </>
+                ) : (
+                  "Sign in"
+                )}
               </Button>
             </form>
           </CardContent>

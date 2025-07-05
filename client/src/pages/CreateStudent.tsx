@@ -10,7 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
-import { ArrowLeft, User, GraduationCap } from "lucide-react";
+import { ArrowLeft, GraduationCap, User, Loader2 } from "lucide-react";
 
 const disciplines = [
   "Computer Science", "Engineering", "Business", "Marketing", "Design", 
@@ -86,7 +86,7 @@ export default function CreateStudent() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.fullName.trim() || !formData.emailAddress.trim()) {
       toast({
         title: "Missing Required Fields",
@@ -111,7 +111,7 @@ export default function CreateStudent() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Dashboard
           </Button>
-          
+
           <div className="flex items-center space-x-3 mb-6">
             <GraduationCap className="w-8 h-8 text-primary-custom" />
             <h1 className="text-3xl font-bold text-charcoal-custom">Create New Student</h1>
