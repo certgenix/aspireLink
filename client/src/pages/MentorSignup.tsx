@@ -9,7 +9,7 @@ import { useLocation } from 'wouter';
 import { signUpWithEmail, signInWithGoogle, createUserProfile } from '@/lib/firebase';
 import { updateProfile } from 'firebase/auth';
 
-export default function StudentSignup() {
+export default function MentorSignup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -23,18 +23,18 @@ export default function StudentSignup() {
     try {
       const userCredential = await signInWithGoogle();
       
-      // Create student profile in Firestore
-      await createUserProfile(userCredential.user, 'student', {
-        displayName: userCredential.user.displayName || 'Student'
+      // Create mentor profile in Firestore
+      await createUserProfile(userCredential.user, 'mentor', {
+        displayName: userCredential.user.displayName || 'Mentor'
       });
 
       toast({
         title: "Account Created",
-        description: "Your student account has been created successfully with Google!",
+        description: "Your mentor account has been created successfully with Google!",
       });
 
-      // Redirect to student registration form
-      setLocation('/register-student');
+      // Redirect to mentor registration form
+      setLocation('/register-mentor');
     } catch (error: any) {
       console.error('Google signup error:', error);
       let errorMessage = "Failed to sign up with Google. Please try again.";
@@ -94,25 +94,25 @@ export default function StudentSignup() {
       await updateProfile(userCredential.user, {
         displayName: fullName
       });
-
-      // Create user profile in Firestore with student role
-      await createUserProfile(userCredential.user, 'student', {
+      
+      // Create mentor profile in Firestore
+      await createUserProfile(userCredential.user, 'mentor', {
         displayName: fullName
       });
 
       toast({
         title: "Account Created",
-        description: "Your student account has been created successfully",
+        description: "Your mentor account has been created successfully!",
       });
 
-      // Redirect to student registration form
-      setLocation('/register-student');
+      // Redirect to mentor registration form
+      setLocation('/register-mentor');
     } catch (error: any) {
-      console.error('Registration error:', error);
-      let errorMessage = "Registration failed. Please try again.";
+      console.error('Mentor signup error:', error);
+      let errorMessage = "Failed to create account. Please try again.";
       
       if (error.code === 'auth/email-already-in-use') {
-        errorMessage = "An account with this email already exists.";
+        errorMessage = "An account with this email already exists. Please try logging in instead.";
       } else if (error.code === 'auth/weak-password') {
         errorMessage = "Password is too weak. Please choose a stronger password.";
       } else if (error.code === 'auth/invalid-email') {
@@ -120,7 +120,7 @@ export default function StudentSignup() {
       }
 
       toast({
-        title: "Registration Failed",
+        title: "Failed to Create Account",
         description: errorMessage,
         variant: "destructive",
       });
@@ -134,16 +134,16 @@ export default function StudentSignup() {
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
-            Create Student Account
+            Create Mentor Account
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            Join AspireLink as a student and connect with industry mentors
+            Join AspireLink as a mentor and guide the next generation
           </p>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>Student Registration</CardTitle>
+            <CardTitle>Mentor Registration</CardTitle>
           </CardHeader>
           <CardContent>
             {/* Google Sign Up */}
@@ -197,7 +197,7 @@ export default function StudentSignup() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   className="mt-1"
-                  placeholder="Enter your email"
+                  placeholder="Enter your professional email"
                 />
               </div>
 
@@ -210,7 +210,7 @@ export default function StudentSignup() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   className="mt-1"
-                  placeholder="Create a password (min 6 characters)"
+                  placeholder="Create a secure password (min 6 characters)"
                 />
               </div>
 
@@ -232,16 +232,20 @@ export default function StudentSignup() {
                 className="w-full"
                 disabled={loading}
               >
-                {loading ? 'Creating Account...' : 'Create Student Account'}
+                {loading ? 'Creating Account...' : 'Create Mentor Account'}
               </Button>
             </form>
 
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
                 Already have an account?{' '}
-                <a href="/login" className="font-medium text-blue-600 hover:text-blue-500">
+                <button
+                  type="button"
+                  onClick={() => setLocation('/login')}
+                  className="font-medium text-blue-600 hover:text-blue-500"
+                >
                   Sign in here
-                </a>
+                </button>
               </p>
             </div>
           </CardContent>

@@ -28,6 +28,7 @@ import CodeOfConduct from "@/pages/CodeOfConduct";
 import Accessibility from "@/pages/Accessibility";
 import Login from "@/pages/Login";
 import StudentSignup from "@/pages/StudentSignup";
+import MentorSignup from "@/pages/MentorSignup";
 import Dashboard from "@/pages/Dashboard";
 import AdminSetup from "@/pages/AdminSetup";
 
@@ -47,6 +48,7 @@ function Router() {
           <Route path="/contact" component={Contact} />
           <Route path="/login" component={Login} />
           <Route path="/signup/student" component={StudentSignup} />
+          <Route path="/signup/mentor" component={MentorSignup} />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/admin/setup" component={AdminSetup} />
           <Route path="/admin/login" component={AdminLogin} />
