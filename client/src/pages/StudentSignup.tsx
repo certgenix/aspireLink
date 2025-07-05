@@ -48,16 +48,20 @@ export default function StudentSignup() {
       console.error('Error message:', error.message);
       console.error('Error stack:', error.stack);
       
-      let errorMessage = "Google sign-up is not configured yet. This requires Firebase Console setup.";
+      let errorMessage = "Google sign-up requires Firebase Console configuration.";
       
       if (error.code === 'auth/popup-closed-by-user') {
         errorMessage = "Sign-up was cancelled. Please try again.";
       } else if (error.code === 'auth/account-exists-with-different-credential') {
         errorMessage = "An account with this email already exists. Please try logging in instead.";
-      } else if (error.code === 'auth/configuration-not-found') {
-        errorMessage = "Google sign-in not configured in Firebase Console.";
+      } else if (error.code === 'auth/unauthorized-domain') {
+        errorMessage = "This domain needs to be added to Firebase Console authorized domains.";
       } else if (error.code === 'auth/operation-not-allowed') {
         errorMessage = "Google sign-in needs to be enabled in Firebase Console Authentication settings.";
+      } else if (error.code === 'auth/invalid-api-key' || error.code === 'auth/app-deleted') {
+        errorMessage = "Firebase configuration issue. Please check API keys.";
+      } else if (error.message.includes('network')) {
+        errorMessage = "Network connection issue. Please check your internet connection.";
       }
 
       toast({

@@ -20,6 +20,7 @@ export default function Login() {
   const handleGoogleSignIn = async () => {
     setLoading(true);
     try {
+      console.log('Attempting Google sign-in...');
       await signInWithGoogle();
       toast({
         title: "Success",
@@ -28,16 +29,28 @@ export default function Login() {
       setLocation('/dashboard');
     } catch (error: any) {
       console.error('Google sign-in error:', error);
-      let errorMessage = "Failed to sign in with Google. Please try again.";
+      console.error('Error details:', {
+        code: error.code,
+        message: error.message,
+        customData: error.customData
+      });
+      
+      let errorMessage = "Google sign-in requires additional Firebase Console setup.";
       
       if (error.code === 'auth/popup-closed-by-user') {
         errorMessage = "Sign-in was cancelled. Please try again.";
-      } else if (error.code === 'auth/user-not-found') {
-        errorMessage = "No account found. Please sign up first.";
+      } else if (error.code === 'auth/unauthorized-domain') {
+        errorMessage = "This domain needs to be added to Firebase Console authorized domains.";
+      } else if (error.code === 'auth/operation-not-allowed') {
+        errorMessage = "Google sign-in needs to be enabled in Firebase Console Authentication settings.";
+      } else if (error.code === 'auth/invalid-api-key' || error.code === 'auth/app-deleted') {
+        errorMessage = "Firebase configuration issue. Please check API keys.";
+      } else if (error.message.includes('network')) {
+        errorMessage = "Network connection issue. Please check your internet connection.";
       }
 
       toast({
-        title: "Google Sign-in Failed",
+        title: "Google Sign-in Setup Required",
         description: errorMessage,
         variant: "destructive",
       });
