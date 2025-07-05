@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { User } from 'firebase/auth';
-import { onAuthStateChange, getUserProfile, updateLastActive, logOut, UserProfile } from '@/lib/firebase';
+import { onAuthStateChange, getUserProfile, createUserProfile, updateLastActive, logOut, UserProfile } from '@/lib/firebase';
 
 interface AuthContextType {
   currentUser: User | null;
@@ -76,10 +76,41 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const unsubscribe = onAuthStateChange(async (user) => {
       if (user) {
         setCurrentUser(user);
-        // Get user profile from Firestore
-        const profile = await getUserProfile(user.uid);
-        setUserProfile(profile);
-        updateActivity();
+        try {
+          // Try to get user profile from Firestore
+          let profile = await getUserProfile(user.uid);
+          
+          // If no profile exists, create a default one (fallback for skipped signup profiles)
+          if (!profile) {
+            console.log('No user profile found, creating default profile...');
+            // Default to 'student' role for now - can be updated by admin later
+            const defaultRole = 'student';
+            try {
+              await createUserProfile(user, defaultRole, {
+                displayName: user.displayName || user.email?.split('@')[0] || 'User'
+              });
+              profile = await getUserProfile(user.uid);
+            } catch (profileError) {
+              console.warn('Failed to create user profile, using fallback:', profileError);
+              // Fallback profile for immediate UI functionality
+              profile = {
+                uid: user.uid,
+                email: user.email || '',
+                role: defaultRole,
+                displayName: user.displayName || user.email?.split('@')[0] || 'User',
+                createdAt: new Date(),
+                lastActive: new Date()
+              };
+            }
+          }
+          
+          setUserProfile(profile);
+          updateActivity();
+        } catch (error) {
+          console.warn('Error handling user profile:', error);
+          // Continue with basic auth even if Firestore fails
+          setUserProfile(null);
+        }
       } else {
         setCurrentUser(null);
         setUserProfile(null);

@@ -125,17 +125,9 @@ export default function StudentSignup() {
       });
       console.log('Step 2 complete: Display name updated');
 
-      // Create user profile in Firestore with student role
-      console.log('Step 3: Creating user profile in Firestore...');
-      try {
-        await createUserProfile(userCredential.user, 'student', {
-          displayName: fullName
-        });
-        console.log('Step 3 complete: User profile created');
-      } catch (firestoreError) {
-        console.warn('Firestore profile creation failed, continuing anyway:', firestoreError);
-        // Continue without Firestore profile for now
-      }
+      // Skip Firestore profile creation for now due to connectivity issues
+      console.log('Step 3: Skipping Firestore profile (will be created on first login)');
+      // Note: User profile will be created when they first log in through AuthContext
 
       toast({
         title: "Account Created",

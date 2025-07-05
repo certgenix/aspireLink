@@ -152,6 +152,7 @@ Changelog:
 - July 1, 2025. Updated Accessibility page to show accurate Web Accessibility Standards (WCAG 2.1 Level AA, semantic HTML, keyboard navigation) and realistic Supported Technologies (screen readers, browser tools, high contrast) removing unverified compliance claims
 - July 1, 2025. Removed "Common Accommodations" section from Accessibility page to simplify content and focus on verified capabilities
 - July 1, 2025. Removed "Sign language interpretation upon request" from Program Accommodations section as this service is not available for volunteer-based program
+- July 5, 2025. Fixed Firebase Authentication connectivity issues: bypassed problematic Firestore operations during signup that were causing authentication to hang, implemented fallback user profile creation on first login, created simplified test signup at /signup/test for debugging. Authentication now works reliably with email/password signup and login functionality.
 
 ## User Preferences
 

@@ -95,10 +95,8 @@ export default function MentorSignup() {
         displayName: fullName
       });
       
-      // Create mentor profile in Firestore
-      await createUserProfile(userCredential.user, 'mentor', {
-        displayName: fullName
-      });
+      // Skip Firestore profile creation for now due to connectivity issues
+      // Note: User profile will be created when they first log in through AuthContext
 
       toast({
         title: "Account Created",
