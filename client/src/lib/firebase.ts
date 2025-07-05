@@ -147,15 +147,20 @@ export const getUserProfile = async (uid: string): Promise<UserProfile | null> =
 
 export const updateLastActive = async (uid: string) => {
   if (!db) {
-    console.warn('Firestore not available, skipping last active update');
-    return;
+    return; // Skip silently to reduce console noise
   }
 
   try {
+    // Use a timeout to prevent hanging on slow connections
     const userRef = doc(db, 'users', uid);
-    await setDoc(userRef, { lastActive: new Date() }, { merge: true });
+    const updatePromise = setDoc(userRef, { lastActive: new Date() }, { merge: true });
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Update timeout')), 2000)
+    );
+    
+    await Promise.race([updatePromise, timeoutPromise]);
   } catch (error) {
-    console.warn('Failed to update last active in Firestore:', error);
+    // Fail silently to avoid performance issues
   }
 };
 
