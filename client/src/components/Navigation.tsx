@@ -86,7 +86,7 @@ export default function Navigation() {
                       Sign In
                     </Button>
                   </Link>
-                  <Link href="/signup/student">
+                  <Link href="/student/signup">
                     <Button size="sm">
                       Get Started
                     </Button>
@@ -155,7 +155,7 @@ export default function Navigation() {
                           Sign In
                         </Link>
                         <Link
-                          href="/signup/student"
+                          href="/student/signup"
                           onClick={() => setIsOpen(false)}
                         >
                           <Button className="w-full">

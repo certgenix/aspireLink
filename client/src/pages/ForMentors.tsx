@@ -79,7 +79,7 @@ export default function ForMentors() {
                 </div>
               </div>
 
-              <Link href="/signup/mentor">
+              <Link href="/mentor/signup">
                 <Button className="bg-secondary-custom hover:bg-secondary-dark text-white px-8 py-4 rounded-lg font-semibold text-lg shadow-lg">
                   Become a Mentor
                 </Button>
