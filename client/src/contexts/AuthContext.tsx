@@ -30,6 +30,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [lastActivity, setLastActivity] = useState(Date.now());
+  const [profileLoadTimeout, setProfileLoadTimeout] = useState<NodeJS.Timeout | null>(null);
 
   // Session timeout: 7 minutes
   const SESSION_TIMEOUT = 7 * 60 * 1000; // 7 minutes in milliseconds
@@ -74,11 +75,47 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Auth state observer
   useEffect(() => {
     const unsubscribe = onAuthStateChange(async (user) => {
+      // Clear any existing timeout
+      if (profileLoadTimeout) {
+        clearTimeout(profileLoadTimeout);
+        setProfileLoadTimeout(null);
+      }
+
       if (user) {
         setCurrentUser(user);
+        
+        // Set a timeout to prevent infinite loading
+        const timeout = setTimeout(() => {
+          console.warn('Profile loading timed out, creating fallback profile');
+          const fallbackProfile: UserProfile = {
+            uid: user.uid,
+            email: user.email || '',
+            role: 'student',
+            displayName: user.displayName || user.email?.split('@')[0] || 'User',
+            createdAt: new Date(),
+            lastActive: new Date()
+          };
+          setUserProfile(fallbackProfile);
+          setLoading(false);
+        }, 10000); // 10 second timeout
+        
+        setProfileLoadTimeout(timeout);
+        
         try {
-          // Try to get user profile from Firestore
-          let profile = await getUserProfile(user.uid);
+          // Try to get user profile from Firestore with a shorter timeout
+          console.log('Attempting to load profile for:', user.email);
+          let profile: UserProfile | null = null;
+          
+          // Create a race between profile fetch and immediate timeout
+          const profilePromise = getUserProfile(user.uid);
+          const timeoutPromise = new Promise<null>((resolve) => 
+            setTimeout(() => {
+              console.warn('Profile fetch timed out after 3 seconds');
+              resolve(null);
+            }, 3000)
+          );
+          
+          profile = await Promise.race([profilePromise, timeoutPromise]);
           
           // If no profile exists, create a default one (fallback for skipped signup profiles)
           if (!profile) {
@@ -110,7 +147,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             console.log('Existing profile found:', profile);
           }
           
+          // Clear timeout since profile loaded successfully
+          if (profileLoadTimeout) {
+            clearTimeout(profileLoadTimeout);
+            setProfileLoadTimeout(null);
+          }
+          
           setUserProfile(profile);
+          setLoading(false);
           updateActivity();
         } catch (error) {
           console.warn('Error handling user profile:', error);
