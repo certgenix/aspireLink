@@ -5,7 +5,7 @@ export default function About() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="py-24" style={{background: 'linear-gradient(135deg, #6366f1 0%, #4338ca 100%)'}}>
+      <section className="py-24" style={{background: 'linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%)'}}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="font-inter font-bold text-4xl md:text-5xl mb-6" style={{color: '#ffffff'}}>
             About AspireLink
