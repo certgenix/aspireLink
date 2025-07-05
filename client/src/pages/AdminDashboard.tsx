@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { 
   Users, 
   GraduationCap, 
@@ -63,7 +64,7 @@ interface Assignment {
   assignedAt: string;
 }
 
-export default function AdminDashboard() {
+function AdminDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<"all" | "active" | "inactive">("all");
   const [selectedAssignments, setSelectedAssignments] = useState<number[]>([]);
@@ -675,5 +676,13 @@ export default function AdminDashboard() {
         </Tabs>
       </div>
     </div>
+  );
+}
+
+export default function ProtectedAdminDashboard() {
+  return (
+    <ProtectedRoute allowedRoles={['admin', 'pd']}>
+      <AdminDashboard />
+    </ProtectedRoute>
   );
 }

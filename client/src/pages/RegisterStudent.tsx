@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -12,6 +12,8 @@ import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { Link } from "wouter";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface StudentData {
   fullName: string;
@@ -49,9 +51,10 @@ const yearOfStudyOptions = [
   "2nd year master's", "1st year PhD", "2nd year PhD", "3rd+ year PhD"
 ];
 
-export default function RegisterStudent() {
+function RegisterStudent() {
   const [step, setStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const { currentUser } = useAuth();
   const [studentData, setStudentData] = useState<StudentData>({
     fullName: "",
     emailAddress: "",
@@ -71,6 +74,17 @@ export default function RegisterStudent() {
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
+  // Populate email from Firebase auth
+  useEffect(() => {
+    if (currentUser && currentUser.email) {
+      setStudentData(prev => ({
+        ...prev,
+        emailAddress: currentUser.email!,
+        fullName: currentUser.displayName || ""
+      }));
+    }
+  }, [currentUser]);
 
   const registrationMutation = useMutation({
     mutationFn: async (data: any) => {
@@ -713,5 +727,13 @@ export default function RegisterStudent() {
 
       </div>
     </div>
+  );
+}
+
+export default function ProtectedRegisterStudent() {
+  return (
+    <ProtectedRoute allowedRoles={['student']}>
+      <RegisterStudent />
+    </ProtectedRoute>
   );
 }

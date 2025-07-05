@@ -38,7 +38,7 @@ export default function Home() {
                   with experienced professionals through 4-month academic cohorts.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
-                  <Link href="/register-student">
+                  <Link href="/signup/student">
                     <Button className="bg-primary-custom hover:bg-primary-dark text-white px-8 py-4 rounded-lg font-semibold text-lg shadow-lg">
                       Apply as Student
                     </Button>
@@ -256,7 +256,7 @@ export default function Home() {
             their careers through meaningful mentorship.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/register-student">
+            <Link href="/signup/student">
               <Button className="bg-white text-primary-custom hover:bg-gray-100 px-8 py-4 rounded-lg font-semibold text-lg">
                 Apply as Student
               </Button>

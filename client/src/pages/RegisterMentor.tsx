@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,8 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { useAuth } from "@/contexts/AuthContext";
 import { 
   Linkedin, 
   User, 
@@ -54,8 +56,9 @@ interface LinkedInData {
   profileSummary: string;
 }
 
-export default function RegisterMentor() {
+function RegisterMentor() {
   const { toast } = useToast();
+  const { currentUser } = useAuth();
   const [step, setStep] = useState(1);
   const [linkedinUrl, setLinkedinUrl] = useState("");
   const [linkedinData, setLinkedinData] = useState<LinkedInData | null>({
@@ -77,6 +80,16 @@ export default function RegisterMentor() {
   const [agreedToCommitment, setAgreedToCommitment] = useState(false);
   const [consentToContact, setConsentToContact] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // Populate data from Firebase auth
+  useEffect(() => {
+    if (currentUser && currentUser.email && linkedinData) {
+      setLinkedinData(prev => ({
+        ...prev!,
+        fullName: currentUser.displayName || prev!.fullName
+      }));
+    }
+  }, [currentUser]);
 
   const autoFillMutation = useMutation({
     mutationFn: async (url: string) => {
@@ -711,5 +724,13 @@ export default function RegisterMentor() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function ProtectedRegisterMentor() {
+  return (
+    <ProtectedRoute allowedRoles={['mentor']}>
+      <RegisterMentor />
+    </ProtectedRoute>
   );
 }
