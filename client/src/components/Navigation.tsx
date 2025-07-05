@@ -4,12 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import logoPath from "@assets/AspireLink-Favicon_1751236188567.png";
-import { useAuth } from "@/hooks/useAuth";
 
 export default function Navigation() {
   const [location] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
-  const { user, isAuthenticated, isLoading } = useAuth();
 
   const navItems = [
     { href: "/", label: "Home" },
@@ -42,60 +40,20 @@ export default function Navigation() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:block">
-            <div className="ml-10 flex items-center space-x-8">
-              <div className="flex items-baseline space-x-8">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`font-medium transition-colors duration-200 ${
-                      isActive(item.href)
-                        ? "text-primary-custom"
-                        : "text-charcoal-custom hover:text-primary-custom"
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
-              
-              {/* Auth buttons */}
-              <div className="flex items-center space-x-3 ml-6">
-                {!isLoading && (
-                  <>
-                    {isAuthenticated ? (
-                      <div className="flex items-center space-x-3">
-                        {user && (
-                          <span className="text-sm text-charcoal-custom max-w-28 truncate whitespace-nowrap" title={`Hello, ${user.firstName || user.email || 'User'}`}>
-                            Hello, {user.firstName || user.email?.split('@')[0] || 'User'}
-                          </span>
-                        )}
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            console.log('Logout clicked');
-                            window.location.href = '/api/logout';
-                          }}
-                        >
-                          Logout
-                        </Button>
-                      </div>
-                    ) : (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          console.log('Login clicked');
-                          window.location.href = '/api/login';
-                        }}
-                      >
-                        Login
-                      </Button>
-                    )}
-                  </>
-                )}
-              </div>
+            <div className="ml-10 flex items-baseline space-x-8">
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`font-medium transition-colors duration-200 ${
+                    isActive(item.href)
+                      ? "text-primary-custom"
+                      : "text-charcoal-custom hover:text-primary-custom"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
             </div>
           </div>
 
@@ -125,46 +83,7 @@ export default function Navigation() {
                       {item.label}
                     </Link>
                   ))}
-                  
-                  {/* Mobile Auth buttons */}
-                  <div className="border-t pt-4 mt-4">
-                    {!isLoading && (
-                      <>
-                        {isAuthenticated ? (
-                          <div className="space-y-3">
-                            {user && (
-                              <div className="text-sm text-charcoal-custom px-3 py-2">
-                                Hello, {user.firstName || user.email}
-                              </div>
-                            )}
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="w-full"
-                              onClick={() => {
-                                setIsOpen(false);
-                                window.location.href = '/api/logout';
-                              }}
-                            >
-                              Logout
-                            </Button>
-                          </div>
-                        ) : (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="w-full"
-                            onClick={() => {
-                              setIsOpen(false);
-                              window.location.href = '/api/login';
-                            }}
-                          >
-                            Login
-                          </Button>
-                        )}
-                      </>
-                    )}
-                  </div>
+
                 </div>
               </SheetContent>
             </Sheet>

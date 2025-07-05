@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -12,13 +12,11 @@ import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { Link } from "wouter";
-import { useAuth } from "@/hooks/useAuth";
 
 interface StudentData {
   fullName: string;
   emailAddress: string;
   phoneNumber: string;
-  linkedinUrl: string;
   universityName: string;
   academicProgram: string;
   yearOfStudy: string;
@@ -58,7 +56,6 @@ export default function RegisterStudent() {
     fullName: "",
     emailAddress: "",
     phoneNumber: "",
-    linkedinUrl: "",
     universityName: "",
     academicProgram: "",
     yearOfStudy: "",
@@ -74,18 +71,6 @@ export default function RegisterStudent() {
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const { user } = useAuth();
-
-  // Auto-populate form with authenticated user data
-  useEffect(() => {
-    if (user) {
-      setStudentData(prev => ({
-        ...prev,
-        fullName: `${user.firstName || ''} ${user.lastName || ''}`.trim(),
-        emailAddress: user.email || ''
-      }));
-    }
-  }, [user]);
 
   const registrationMutation = useMutation({
     mutationFn: async (data: any) => {
@@ -174,38 +159,6 @@ export default function RegisterStudent() {
         toast({
           title: "Invalid Email Format",
           description: "Please enter a valid email address.",
-          variant: "destructive",
-        });
-        return;
-      }
-      if (!studentData.phoneNumber.trim()) {
-        toast({
-          title: "Phone Number Required",
-          description: "Please enter your phone number to continue.",
-          variant: "destructive",
-        });
-        return;
-      }
-      if (!studentData.universityName.trim()) {
-        toast({
-          title: "University Required",
-          description: "Please enter your university name to continue.",
-          variant: "destructive",
-        });
-        return;
-      }
-      if (!studentData.academicProgram.trim()) {
-        toast({
-          title: "Academic Program Required",
-          description: "Please enter your academic program to continue.",
-          variant: "destructive",
-        });
-        return;
-      }
-      if (!studentData.yearOfStudy.trim()) {
-        toast({
-          title: "Year of Study Required",
-          description: "Please select your year of study to continue.",
           variant: "destructive",
         });
         return;
@@ -321,30 +274,18 @@ export default function RegisterStudent() {
                     <CheckCircle className="w-12 h-12 text-green-600" />
                   </div>
                   <h1 className="text-3xl font-bold text-charcoal-custom">
-                    Welcome to AspireLink, {studentData.fullName.split(' ')[0]}!
+                    Registration Successful!
                   </h1>
                   <p className="text-lg text-gray-600 text-center">
-                    Thank you for applying to our mentorship program. Your application has been successfully submitted and we're excited to help you connect with an industry professional who can guide your career journey.
+                    Thank you for applying to AspireLink's mentorship program. We've received your registration and will review your application carefully.
                   </p>
                   <div className="bg-blue-50 p-6 rounded-lg w-full">
-                    <h3 className="font-semibold text-charcoal-custom mb-3">Your mentorship journey starts here!</h3>
-                    <ul className="text-sm text-gray-700 space-y-3">
-                      <li className="flex items-start">
-                        <span className="font-medium text-blue-600 mr-2">1.</span>
-                        <span><strong>Professor Verification:</strong> We'll contact your nominating professor to confirm your application</span>
-                      </li>
-                      <li className="flex items-start">
-                        <span className="font-medium text-blue-600 mr-2">2.</span>
-                        <span><strong>Smart Matching:</strong> Our team will carefully match you with a mentor based on your career interests and goals</span>
-                      </li>
-                      <li className="flex items-start">
-                        <span className="font-medium text-blue-600 mr-2">3.</span>
-                        <span><strong>Introduction Email:</strong> You'll receive your mentor match within 2 weeks, including their background and first meeting instructions</span>
-                      </li>
-                      <li className="flex items-start">
-                        <span className="font-medium text-blue-600 mr-2">4.</span>
-                        <span><strong>4-Month Program:</strong> Begin your personalized mentorship with monthly sessions, goal setting, and career guidance</span>
-                      </li>
+                    <h3 className="font-semibold text-charcoal-custom mb-2">What happens next?</h3>
+                    <ul className="text-sm text-gray-700 space-y-2">
+                      <li>• We'll contact your nominating professor to verify your nomination</li>
+                      <li>• Our matching team will review your preferences and goals</li>
+                      <li>• You'll receive an email within 2 weeks with your mentor match</li>
+                      <li>• Your 4-month mentorship program will begin once both parties confirm</li>
                     </ul>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -451,7 +392,7 @@ export default function RegisterStudent() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <Label htmlFor="phoneNumber" className="text-base font-medium">
-                    Phone Number *
+                    Phone Number
                   </Label>
                   <Input
                     id="phoneNumber"
@@ -460,28 +401,12 @@ export default function RegisterStudent() {
                     placeholder="(555) 123-4567"
                     className="mt-2"
                   />
-                </div>
-
-                <div>
-                  <Label htmlFor="linkedinUrl" className="text-base font-medium">
-                    LinkedIn Profile URL
-                  </Label>
-                  <Input
-                    id="linkedinUrl"
-                    type="url"
-                    value={studentData.linkedinUrl}
-                    onChange={(e) => setStudentData({...studentData, linkedinUrl: e.target.value})}
-                    placeholder="https://linkedin.com/in/yourprofile"
-                    className="mt-2"
-                  />
                   <p className="text-sm text-gray-500 mt-1">Optional</p>
                 </div>
-              </div>
 
-              <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <Label htmlFor="universityName" className="text-base font-medium">
-                    University Name *
+                    University Name
                   </Label>
                   <Input
                     id="universityName"
@@ -490,11 +415,14 @@ export default function RegisterStudent() {
                     placeholder="Name of University"
                     className="mt-2"
                   />
+                  <p className="text-sm text-gray-500 mt-1">Optional</p>
                 </div>
+              </div>
 
+              <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <Label htmlFor="academicProgram" className="text-base font-medium">
-                    Academic Program / Major *
+                    Academic Program / Major
                   </Label>
                   <Input
                     id="academicProgram"
@@ -503,21 +431,23 @@ export default function RegisterStudent() {
                     placeholder="Computer Science, Business, etc."
                     className="mt-2"
                   />
+                  <p className="text-sm text-gray-500 mt-1">Optional</p>
                 </div>
-              </div>
 
-              <div>
-                <Label className="text-base font-medium">Year of Study *</Label>
-                <Select value={studentData.yearOfStudy} onValueChange={(value) => setStudentData({...studentData, yearOfStudy: value})}>
-                  <SelectTrigger className="mt-2">
-                    <SelectValue placeholder="Select your year of study" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {yearOfStudyOptions.map((year) => (
-                      <SelectItem key={year} value={year}>{year}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div>
+                  <Label className="text-base font-medium">Year of Study</Label>
+                  <Select value={studentData.yearOfStudy} onValueChange={(value) => setStudentData({...studentData, yearOfStudy: value})}>
+                    <SelectTrigger className="mt-2">
+                      <SelectValue placeholder="Select your year of study" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {yearOfStudyOptions.map((year) => (
+                        <SelectItem key={year} value={year}>{year}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="text-sm text-gray-500 mt-1">Optional</p>
+                </div>
               </div>
 
               <div className="flex justify-end pt-6">

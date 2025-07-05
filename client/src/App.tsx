@@ -1,9 +1,8 @@
-import { Switch, Route, Redirect } from "wouter";
+import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { useAuth } from "@/hooks/useAuth";
 import NotFound from "@/pages/not-found";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -15,8 +14,6 @@ import FAQ from "@/pages/FAQ";
 import Contact from "@/pages/Contact";
 import RegisterMentor from "@/pages/RegisterMentor";
 import RegisterStudent from "@/pages/RegisterStudent";
-import StudentDashboard from "@/pages/StudentDashboard";
-import MentorDashboard from "@/pages/MentorDashboard";
 import AdminLogin from "@/pages/AdminLogin";
 import AdminDashboard from "@/pages/AdminDashboard";
 import CreateStudent from "@/pages/CreateStudent";
@@ -30,20 +27,6 @@ import CodeOfConduct from "@/pages/CodeOfConduct";
 import Accessibility from "@/pages/Accessibility";
 
 function Router() {
-  const { user, isLoading } = useAuth();
-
-  // Show loading while checking authentication
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p>Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
@@ -55,8 +38,6 @@ function Router() {
           <Route path="/mentors" component={ForMentors} />
           <Route path="/register-mentor" component={RegisterMentor} />
           <Route path="/register-student" component={RegisterStudent} />
-          <Route path="/student-dashboard" component={StudentDashboard} />
-          <Route path="/mentor-dashboard" component={MentorDashboard} />
           <Route path="/faq" component={FAQ} />
           <Route path="/contact" component={Contact} />
           <Route path="/admin/login" component={AdminLogin} />
