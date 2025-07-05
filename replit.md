@@ -161,6 +161,7 @@ Changelog:
 - July 5, 2025. Updated circular icons to use proper Lucide React icons instead of numbers: Home page process steps (FileText, UserCheck, Calendar, Award), features section (Target, TrendingUp, Network), About page vision (Globe, Heart, Rocket), and Contact page "Other Ways to Connect" section (Clock, MapPin, Calendar) - all with solid colored backgrounds and white icons matching For Students page style
 - July 5, 2025. Streamlined Contact page by removing duplicate "Contact Information" and "Other Ways to Connect" sections, keeping only the comprehensive "How to Reach Us" section with email and LinkedIn contact details to eliminate redundancy
 - July 5, 2025. Updated Privacy Policy page: removed outdated "Last Updated: December 30, 2024" date and enhanced Data Security section to specify that user data is stored in encrypted storage facilities located in the United States for security and compliance
+- July 5, 2025. Fixed FAQ page navigation buttons: "Email Us" button now navigates to Contact page instead of opening email client, "Follow Us" button now correctly links to AspireLink LinkedIn company page (linkedin.com/company/aspirelinkorg)
 
 ## User Preferences
 

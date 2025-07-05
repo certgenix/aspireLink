@@ -4,6 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Link } from "wouter";
 
 export default function FAQ() {
   const faqs = [
@@ -106,14 +107,14 @@ export default function FAQ() {
             started with the mentorship program.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="mailto:contact@aspirelink.org"
+            <Link 
+              href="/contact"
               className="inline-flex items-center justify-center bg-primary-custom hover:bg-primary-dark text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200"
             >
               Email Us
-            </a>
+            </Link>
             <a
-              href="https://twitter.com/AspireLinkOrg"
+              href="https://www.linkedin.com/company/aspirelinkorg"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center border-2 px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200"
