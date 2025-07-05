@@ -21,10 +21,6 @@ export default function PrivacyPolicy() {
           <div className="space-y-8">
             <Card>
               <CardContent className="p-8">
-                <p className="text-sm text-gray-500 mb-6">
-                  <strong>Last Updated:</strong> December 30, 2024
-                </p>
-                
                 <div className="prose prose-charcoal max-w-none">
                   <h2 className="text-2xl font-bold text-charcoal-custom mb-4">Introduction</h2>
                   <p className="text-gray-700 mb-6">
@@ -70,8 +66,11 @@ export default function PrivacyPolicy() {
                   </ul>
 
                   <h2 className="text-2xl font-bold text-charcoal-custom mb-4">Data Security</h2>
+                  <p className="text-gray-700 mb-4">
+                    We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. Your data is stored in encrypted storage facilities located in the United States, ensuring both security and compliance with applicable data protection standards.
+                  </p>
                   <p className="text-gray-700 mb-6">
-                    We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. However, no internet transmission is completely secure, and we cannot guarantee absolute security.
+                    However, no internet transmission is completely secure, and we cannot guarantee absolute security.
                   </p>
 
                   <h2 className="text-2xl font-bold text-charcoal-custom mb-4">Your Rights</h2>
