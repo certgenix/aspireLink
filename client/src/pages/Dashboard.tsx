@@ -8,6 +8,23 @@ export default function Dashboard() {
   const { currentUser, userProfile, logout } = useAuth();
   const [, setLocation] = useLocation();
 
+  // Debug function to fix profile issues
+  const fixUserProfile = async () => {
+    if (currentUser) {
+      try {
+        console.log('Attempting to fix user profile...');
+        const { createUserProfile } = await import('@/lib/firebase');
+        await createUserProfile(currentUser, 'student', {
+          displayName: currentUser.displayName || currentUser.email?.split('@')[0] || 'User'
+        });
+        console.log('Profile fixed, please refresh the page');
+        window.location.reload();
+      } catch (error) {
+        console.error('Failed to fix profile:', error);
+      }
+    }
+  };
+
   const handleLogout = async () => {
     try {
       await logout();
@@ -19,7 +36,25 @@ export default function Dashboard() {
   };
 
   const getDashboardContent = () => {
-    if (!userProfile) return null;
+    if (!userProfile || !userProfile.role) {
+      return (
+        <Card>
+          <CardHeader>
+            <CardTitle>Profile Setup Required</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p>Your account role is not recognized. Please contact support.</p>
+            <Button onClick={fixUserProfile} variant="outline">
+              Fix My Profile (Auto-assign Student Role)
+            </Button>
+            <div className="text-sm text-gray-600">
+              <p>Debug info:</p>
+              <pre>{JSON.stringify({ currentUser: !!currentUser, userProfile }, null, 2)}</pre>
+            </div>
+          </CardContent>
+        </Card>
+      );
+    }
 
     switch (userProfile.role) {
       case 'admin':

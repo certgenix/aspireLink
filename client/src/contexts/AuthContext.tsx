@@ -82,14 +82,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           
           // If no profile exists, create a default one (fallback for skipped signup profiles)
           if (!profile) {
-            console.log('No user profile found, creating default profile...');
+            console.log('No user profile found, creating default profile for:', user.email);
             // Default to 'student' role for now - can be updated by admin later
             const defaultRole = 'student';
             try {
+              console.log('Attempting to create user profile...');
               await createUserProfile(user, defaultRole, {
                 displayName: user.displayName || user.email?.split('@')[0] || 'User'
               });
+              console.log('Profile created, fetching...');
               profile = await getUserProfile(user.uid);
+              console.log('Profile fetched:', profile);
             } catch (profileError) {
               console.warn('Failed to create user profile, using fallback:', profileError);
               // Fallback profile for immediate UI functionality
@@ -101,7 +104,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 createdAt: new Date(),
                 lastActive: new Date()
               };
+              console.log('Using fallback profile:', profile);
             }
+          } else {
+            console.log('Existing profile found:', profile);
           }
           
           setUserProfile(profile);
