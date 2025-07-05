@@ -103,8 +103,8 @@ export default function MentorSignup() {
         description: "Your mentor account has been created successfully!",
       });
 
-      // Redirect to mentor registration form
-      setLocation('/register-mentor');
+      // Redirect to dashboard instead of protected route
+      setLocation('/dashboard');
     } catch (error: any) {
       console.error('Mentor signup error:', error);
       let errorMessage = "Failed to create account. Please try again.";

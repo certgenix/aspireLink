@@ -134,9 +134,9 @@ export default function StudentSignup() {
         description: "Your student account has been created successfully",
       });
 
-      console.log('Redirecting to registration form...');
-      // Redirect to student registration form
-      setLocation('/register-student');
+      console.log('Redirecting to dashboard...');
+      // Redirect to dashboard instead of protected route
+      setLocation('/dashboard');
     } catch (error: any) {
       console.error('Registration error details:', error);
       console.error('Error code:', error.code);

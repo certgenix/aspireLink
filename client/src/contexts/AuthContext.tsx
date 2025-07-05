@@ -108,8 +108,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           updateActivity();
         } catch (error) {
           console.warn('Error handling user profile:', error);
-          // Continue with basic auth even if Firestore fails
-          setUserProfile(null);
+          // Create basic fallback profile with 'student' role to prevent access denied
+          const fallbackProfile: UserProfile = {
+            uid: user.uid,
+            email: user.email || '',
+            role: 'student',
+            displayName: user.displayName || user.email?.split('@')[0] || 'User',
+            createdAt: new Date(),
+            lastActive: new Date()
+          };
+          console.log('Using fallback profile:', fallbackProfile);
+          setUserProfile(fallbackProfile);
         }
       } else {
         setCurrentUser(null);
