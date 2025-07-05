@@ -47,6 +47,7 @@ export const studentRegistrations = pgTable("student_registrations", {
   // Basic Information
   fullName: text("full_name").notNull(),
   emailAddress: text("email_address").notNull(),
+  linkedinUrl: text("linkedin_url"),
   phoneNumber: text("phone_number"),
   universityName: text("university_name").notNull(),
   academicProgram: text("academic_program").notNull(),

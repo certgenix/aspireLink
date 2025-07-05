@@ -16,6 +16,7 @@ import { Link } from "wouter";
 interface StudentData {
   fullName: string;
   emailAddress: string;
+  linkedinUrl: string;
   phoneNumber: string;
   universityName: string;
   academicProgram: string;
@@ -55,6 +56,7 @@ export default function RegisterStudent() {
   const [studentData, setStudentData] = useState<StudentData>({
     fullName: "",
     emailAddress: "",
+    linkedinUrl: "",
     phoneNumber: "",
     universityName: "",
     academicProgram: "",
@@ -163,6 +165,46 @@ export default function RegisterStudent() {
         });
         return;
       }
+      if (!studentData.linkedinUrl.trim()) {
+        toast({
+          title: "LinkedIn URL Required",
+          description: "Please enter your LinkedIn profile URL to continue.",
+          variant: "destructive",
+        });
+        return;
+      }
+      if (!studentData.phoneNumber.trim()) {
+        toast({
+          title: "Phone Number Required",
+          description: "Please enter your phone number to continue.",
+          variant: "destructive",
+        });
+        return;
+      }
+      if (!studentData.universityName.trim()) {
+        toast({
+          title: "University Name Required",
+          description: "Please enter your university name to continue.",
+          variant: "destructive",
+        });
+        return;
+      }
+      if (!studentData.academicProgram.trim()) {
+        toast({
+          title: "Academic Program Required",
+          description: "Please enter your academic program to continue.",
+          variant: "destructive",
+        });
+        return;
+      }
+      if (!studentData.yearOfStudy.trim()) {
+        toast({
+          title: "Year of Study Required",
+          description: "Please select your year of study to continue.",
+          variant: "destructive",
+        });
+        return;
+      }
     }
 
     if (step === 2) {
@@ -244,7 +286,8 @@ export default function RegisterStudent() {
     const registrationData = {
       fullName: studentData.fullName,
       emailAddress: studentData.emailAddress,
-      phoneNumber: studentData.phoneNumber.trim() || null,
+      linkedinUrl: studentData.linkedinUrl,
+      phoneNumber: studentData.phoneNumber,
       universityName: studentData.universityName,
       academicProgram: studentData.academicProgram,
       yearOfStudy: studentData.yearOfStudy,
@@ -389,10 +432,25 @@ export default function RegisterStudent() {
                 </div>
               </div>
 
+              <div>
+                <Label htmlFor="linkedinUrl" className="text-base font-medium">
+                  LinkedIn Profile URL *
+                </Label>
+                <Input
+                  id="linkedinUrl"
+                  type="url"
+                  value={studentData.linkedinUrl}
+                  onChange={(e) => setStudentData({...studentData, linkedinUrl: e.target.value})}
+                  placeholder="https://linkedin.com/in/yourprofile"
+                  className="mt-2"
+                />
+                <p className="text-sm text-gray-500 mt-1">Professional profile verification</p>
+              </div>
+
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <Label htmlFor="phoneNumber" className="text-base font-medium">
-                    Phone Number
+                    Phone Number *
                   </Label>
                   <Input
                     id="phoneNumber"
@@ -401,12 +459,11 @@ export default function RegisterStudent() {
                     placeholder="(555) 123-4567"
                     className="mt-2"
                   />
-                  <p className="text-sm text-gray-500 mt-1">Optional</p>
                 </div>
 
                 <div>
                   <Label htmlFor="universityName" className="text-base font-medium">
-                    University Name
+                    University Name *
                   </Label>
                   <Input
                     id="universityName"
@@ -415,14 +472,13 @@ export default function RegisterStudent() {
                     placeholder="Name of University"
                     className="mt-2"
                   />
-                  <p className="text-sm text-gray-500 mt-1">Optional</p>
                 </div>
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <Label htmlFor="academicProgram" className="text-base font-medium">
-                    Academic Program / Major
+                    Academic Program / Major *
                   </Label>
                   <Input
                     id="academicProgram"
@@ -431,11 +487,10 @@ export default function RegisterStudent() {
                     placeholder="Computer Science, Business, etc."
                     className="mt-2"
                   />
-                  <p className="text-sm text-gray-500 mt-1">Optional</p>
                 </div>
 
                 <div>
-                  <Label className="text-base font-medium">Year of Study</Label>
+                  <Label className="text-base font-medium">Year of Study *</Label>
                   <Select value={studentData.yearOfStudy} onValueChange={(value) => setStudentData({...studentData, yearOfStudy: value})}>
                     <SelectTrigger className="mt-2">
                       <SelectValue placeholder="Select your year of study" />
@@ -446,7 +501,6 @@ export default function RegisterStudent() {
                       ))}
                     </SelectContent>
                   </Select>
-                  <p className="text-sm text-gray-500 mt-1">Optional</p>
                 </div>
               </div>
 
