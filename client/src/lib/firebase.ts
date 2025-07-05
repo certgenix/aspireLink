@@ -127,7 +127,16 @@ export const getUserProfile = async (uid: string): Promise<UserProfile | null> =
     const userSnap = await getDoc(userRef);
     
     if (userSnap.exists()) {
-      return userSnap.data() as UserProfile;
+      const data = userSnap.data();
+      console.log('Raw profile data from Firestore:', data);
+      
+      // Validate that required fields exist
+      if (data && data.uid && data.email && data.role) {
+        return data as UserProfile;
+      } else {
+        console.warn('Profile data is corrupted or incomplete:', data);
+        return null;
+      }
     }
     return null;
   } catch (error) {

@@ -12,13 +12,33 @@ export default function Dashboard() {
   const fixUserProfile = async () => {
     if (currentUser) {
       try {
-        console.log('Attempting to fix user profile...');
-        const { createUserProfile } = await import('@/lib/firebase');
-        await createUserProfile(currentUser, 'student', {
-          displayName: currentUser.displayName || currentUser.email?.split('@')[0] || 'User'
-        });
-        console.log('Profile fixed, please refresh the page');
-        window.location.reload();
+        console.log('Fixing corrupted user profile...');
+        const { db } = await import('@/lib/firebase');
+        const { doc, setDoc } = await import('firebase/firestore');
+        
+        if (db) {
+          // Create a complete new profile, overwriting any corrupted data
+          const userRef = doc(db, 'users', currentUser.uid);
+          const completeProfile = {
+            uid: currentUser.uid,
+            email: currentUser.email!,
+            role: 'student',
+            displayName: currentUser.displayName || currentUser.email?.split('@')[0] || 'User',
+            createdAt: new Date(),
+            lastActive: new Date()
+          };
+          
+          console.log('Setting complete profile:', completeProfile);
+          await setDoc(userRef, completeProfile);
+          console.log('Profile completely rebuilt, refreshing...');
+          
+          // Force refresh to reload auth context
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        } else {
+          console.error('Firestore not available');
+        }
       } catch (error) {
         console.error('Failed to fix profile:', error);
       }
@@ -44,9 +64,14 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p>Your account role is not recognized. Please contact support.</p>
-            <Button onClick={fixUserProfile} variant="outline">
-              Fix My Profile (Auto-assign Student Role)
-            </Button>
+            <div className="space-x-2">
+              <Button onClick={fixUserProfile} variant="outline">
+                Fix My Profile (Auto-assign Student Role)
+              </Button>
+              <Button onClick={handleLogout} variant="secondary">
+                Sign Out & Start Fresh
+              </Button>
+            </div>
             <div className="text-sm text-gray-600">
               <p>Debug info:</p>
               <pre>{JSON.stringify({ currentUser: !!currentUser, userProfile }, null, 2)}</pre>
