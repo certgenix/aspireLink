@@ -654,7 +654,7 @@ export default function RegisterStudent() {
                           className={`justify-start h-auto py-3 text-sm transition-all duration-200 ${
                             studentData.preferredDisciplines.includes(discipline) 
                               ? 'bg-primary-custom hover:bg-primary-dark text-white' 
-                              : 'hover:bg-gray-50 border-gray-200'
+                              : 'hover:bg-gray-50 hover:text-gray-900 border-gray-200 text-gray-700'
                           }`}
                         >
                           {discipline}
@@ -695,7 +695,7 @@ export default function RegisterStudent() {
                           className={`justify-start h-auto py-3 text-sm transition-all duration-200 ${
                             studentData.mentoringTopics.includes(topic) 
                               ? 'bg-primary-custom hover:bg-primary-dark text-white' 
-                              : 'hover:bg-gray-50 border-gray-200'
+                              : 'hover:bg-gray-50 hover:text-gray-900 border-gray-200 text-gray-700'
                           }`}
                         >
                           {topic}

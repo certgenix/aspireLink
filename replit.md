@@ -152,6 +152,7 @@ Changelog:
 - July 1, 2025. Updated Accessibility page to show accurate Web Accessibility Standards (WCAG 2.1 Level AA, semantic HTML, keyboard navigation) and realistic Supported Technologies (screen readers, browser tools, high contrast) removing unverified compliance claims
 - July 1, 2025. Removed "Common Accommodations" section from Accessibility page to simplify content and focus on verified capabilities
 - July 1, 2025. Removed "Sign language interpretation upon request" from Program Accommodations section as this service is not available for volunteer-based program
+- July 1, 2025. Fixed button text visibility issue on student registration step 3: added proper text color classes (hover:text-gray-900 and text-gray-700) to Academic Disciplines and Mentoring Topics buttons to prevent text from disappearing on hover
 
 ## User Preferences
 
