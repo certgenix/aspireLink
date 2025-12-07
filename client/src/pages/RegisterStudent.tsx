@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { useLocation } from "wouter";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -11,7 +10,6 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
-import { useAuth } from "@/contexts/AuthContext";
 import { 
   User, 
   GraduationCap, 
@@ -47,13 +45,8 @@ const yearOfStudyOptions = [
 
 export default function RegisterStudent() {
   const { toast } = useToast();
-  const [, setLocationPath] = useLocation();
-  const { user, refreshUser } = useAuth();
   const [step, setStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  
-  // Check if user is completing their profile (came from /complete-profile)
-  const isCompletingProfile = typeof window !== 'undefined' && window.location.search.includes('complete=true');
 
   const [studentData, setStudentData] = useState({
     fullName: "",
@@ -73,33 +66,16 @@ export default function RegisterStudent() {
     consentToContact: false,
   });
 
-  // Pre-fill user data if authenticated
-  useEffect(() => {
-    if (user && isCompletingProfile) {
-      setStudentData(prev => ({
-        ...prev,
-        fullName: user.displayName || prev.fullName,
-        emailAddress: user.email || prev.emailAddress,
-      }));
-    }
-  }, [user, isCompletingProfile]);
-
   const registrationMutation = useMutation({
     mutationFn: async (data: any) => {
       return apiRequest("/api/student-registration", "POST", data);
     },
-    onSuccess: async () => {
+    onSuccess: () => {
       setIsSubmitted(true);
       toast({
         title: "Registration Successful",
         description: "Thank you for applying to AspireLink's mentorship program!",
       });
-      
-      // If user is completing their profile, refresh user data (no auto-redirect)
-      if (isCompletingProfile && user) {
-        await refreshUser();
-      }
-      // No auto-redirect - users will see the success page with navigation buttons
     },
     onError: () => {
       toast({
@@ -123,6 +99,7 @@ export default function RegisterStudent() {
     const requiredStep1Fields = [
       { field: studentData.fullName, name: "Full Name" },
       { field: studentData.emailAddress, name: "Email Address" },
+      { field: studentData.linkedinUrl, name: "LinkedIn URL" },
       { field: studentData.phoneNumber, name: "Phone Number" },
       { field: studentData.universityName, name: "University Name" },
       { field: studentData.academicProgram, name: "Academic Program" },
@@ -203,25 +180,15 @@ export default function RegisterStudent() {
               </div>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button 
-                  onClick={() => setLocationPath('/signup?role=student&registered=true&email=' + encodeURIComponent(studentData.emailAddress || ''))}
+                  onClick={() => window.location.href = '/'}
                   className="bg-primary-custom hover:bg-primary-dark text-white"
-                  data-testid="button-signup-student"
                 >
-                  Sign Up Now
+                  Return to Home
                 </Button>
                 <Button 
                   variant="outline"
-                  onClick={() => setLocationPath('/signin')}
+                  onClick={() => window.location.href = '/faq'}
                   className="border-gray-300"
-                  data-testid="button-login-student"
-                >
-                  Already have an account? Log In
-                </Button>
-                <Button 
-                  variant="outline"
-                  onClick={() => setLocationPath('/faq')}
-                  className="border-gray-300"
-                  data-testid="button-faq"
                 >
                   View FAQ
                 </Button>
@@ -313,7 +280,7 @@ export default function RegisterStudent() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="linkedinUrl">LinkedIn Profile URL</Label>
+                  <Label htmlFor="linkedinUrl">LinkedIn Profile URL *</Label>
                   <Input
                     id="linkedinUrl"
                     type="url"
@@ -322,7 +289,7 @@ export default function RegisterStudent() {
                     placeholder="https://linkedin.com/in/yourprofile"
                     className="mt-2"
                   />
-                  <p className="text-sm text-gray-500 mt-1">Optional - helps with professional verification</p>
+                  <p className="text-sm text-gray-500 mt-1">Required for professional verification</p>
                 </div>
               </div>
 
@@ -379,6 +346,14 @@ export default function RegisterStudent() {
                       toast({
                         title: "Required Field Missing",
                         description: "Please enter your email address to continue.",
+                        variant: "destructive",
+                      });
+                      return;
+                    }
+                    if (!studentData.linkedinUrl.trim()) {
+                      toast({
+                        title: "Required Field Missing",
+                        description: "Please enter your LinkedIn profile URL to continue.",
                         variant: "destructive",
                       });
                       return;
